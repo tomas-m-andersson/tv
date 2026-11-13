@@ -97,6 +97,7 @@ select{background:var(--card);color:var(--ink);border:2px solid var(--line);bord
 .tomt{text-align:center;color:var(--mut);margin:36px 0;font-size:1.05rem;line-height:1.6}
 
 /* Sidindelning (som i Mat-appens receptbok) */
+.lista{touch-action:pan-y}
 .sidor{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 0}
 .sidor[hidden]{display:none}
 .sidor .rund:disabled{opacity:.35;cursor:default}
@@ -289,7 +290,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
   let cache = LS.get(K_CACHE, {});
   let tab = 'todo', filter = 'all', sortBy = LS.get(K_SORT, 'soon');
   let perPage = LS.get(K_PER, 20);   // 0 = visa alla på en sida
-  let page = 1;
+  let page = 1, lastPages = 1;
 
   const saveItems = () => LS.set(K_ITEMS, items);
   const live = () => items.filter(i => !i.deleted);
@@ -524,6 +525,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
     // Sidindelning
     const total = arr.length;
     const pages = perPage > 0 ? Math.max(1, Math.ceil(total / perPage)) : 1;
+    lastPages = pages;
     if (page > pages) page = pages;
     if (page < 1) page = 1;
     const start = perPage > 0 ? (page - 1) * perPage : 0;
@@ -533,7 +535,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
     sidor.hidden = pages <= 1;
     if (pages > 1) {
       $('#sidaNr').textContent = 'Sida ' + page + ' av ' + pages;
-      $('#sidaInfo').textContent = 'Visar ' + (start + 1) + '–' + (start + shown.length) + ' av ' + total;
+      $('#sidaInfo').textContent = 'Visar ' + (start + 1) + '–' + (start + shown.length) + ' av ' + total + (matchMedia('(pointer: coarse)').matches ? ' · svep för att bläddra' : '');
       $('#sidaForra').disabled = page <= 1;
       $('#sidaNasta').disabled = page >= pages;
     }
@@ -668,16 +670,59 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
   sortSel.value = sortBy;
   sortSel.addEventListener('change', () => { sortBy = sortSel.value; LS.set(K_SORT, sortBy); page = 1; render(); });
 
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   function gotoPage(n) {
+    if (n < 1 || n > lastPages || n === page) return;
+    const dir = n > page ? 1 : -1;
     page = n; render();
+    const list = $('#lista');
+    if (!reduceMotion.matches && list.animate) {
+      list.animate([{ transform: 'translateX(' + (dir * 60) + 'px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 220, easing: 'ease-out' });
+    }
     const top = $('.appnav').getBoundingClientRect().top + window.scrollY - 12;
     window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
   }
   $('#sidaForra').addEventListener('click', () => gotoPage(page - 1));
   $('#sidaNasta').addEventListener('click', () => gotoPage(page + 1));
 
+  /* ---------- Svep med fingret för att byta sida ---------- */
+  let sw = null, lastSwipe = 0;
+  const listEl = $('#lista');
+  listEl.addEventListener('touchstart', e => {
+    if (lastPages <= 1 || e.touches.length !== 1) { sw = null; return; }
+    const t = e.touches[0];
+    sw = { x: t.clientX, y: t.clientY, dx: 0, dir: null };
+  }, { passive: true });
+  listEl.addEventListener('touchmove', e => {
+    if (!sw) return;
+    const t = e.touches[0];
+    const dx = t.clientX - sw.x, dy = t.clientY - sw.y;
+    if (!sw.dir && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) sw.dir = Math.abs(dx) > Math.abs(dy) * 1.2 ? 'h' : 'v';
+    if (sw.dir !== 'h') return;
+    sw.dx = dx;
+    const atEnd = (dx > 0 && page <= 1) || (dx < 0 && page >= lastPages);
+    listEl.style.transition = 'none';
+    listEl.style.transform = 'translateX(' + (dx * (atEnd ? 0.15 : 0.45)) + 'px)';
+  }, { passive: true });
+  function endSwipe() {
+    if (!sw) return;
+    const { dir, dx } = sw;
+    sw = null;
+    if (dir !== 'h') return;
+    lastSwipe = Date.now();
+    listEl.style.transition = 'transform .18s ease-out';
+    listEl.style.transform = '';
+    setTimeout(() => { listEl.style.transition = ''; }, 200);
+    if (Math.abs(dx) < 60) return;
+    if (dx < 0 && page < lastPages) gotoPage(page + 1);       // svep åt vänster = nästa sida
+    else if (dx > 0 && page > 1) gotoPage(page - 1);           // svep åt höger = föregående sida
+  }
+  listEl.addEventListener('touchend', endSwipe);
+  listEl.addEventListener('touchcancel', endSwipe);
+
   /* ---------- Klick på kort ---------- */
   $('#lista').addEventListener('click', e => {
+    if (Date.now() - lastSwipe < 400) return;   // klicket kom från ett svep
     const c = e.target.closest('.kort');
     if (!c) return;
     const it = items.find(i => keyOf(i) === c.dataset.key);
