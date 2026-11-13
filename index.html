@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1115">
+<title>Se sen</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23f5b83d'/%3E%3Cpath d='M25 20 L46 32 L25 44 Z' fill='%230f1115'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1115; --panel:#181b22; --panel2:#20242d; --line:#2a2f3a;
+  --text:#eef0f4; --muted:#9aa1ae; --accent:#f5b83d; --accent-ink:#1a1405;
+  --soon:#f5b83d; --avail:#4fd18b; --rent:#7fb2ff; --out:#9aa1ae; --danger:#ff6b6b;
+  --radius:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;font-size:16px;-webkit-tap-highlight-color:transparent}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--accent)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header.top{position:sticky;top:0;z-index:20;background:rgba(15,17,21,.92);backdrop-filter:blur(10px);
+  padding:calc(env(safe-area-inset-top) + 12px) 0 12px;border-bottom:1px solid var(--line)}
+.top-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand svg{width:34px;height:34px;flex:none}
+h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.6rem;margin:0;letter-spacing:-.02em}
+.icon-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center}
+.icon-btn svg{width:20px;height:20px}
+.icon-btn.spin svg{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.top-actions{display:flex;gap:8px}
+
+.search-wrap{position:relative;margin:16px 0 8px}
+.search-wrap input{width:100%;padding:14px 16px 14px 46px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:1rem;outline:none}
+.search-wrap input:focus{border-color:var(--accent)}
+.search-wrap .s-ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--muted);pointer-events:none}
+.results{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius);
+  max-height:65vh;overflow:auto;z-index:30;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.r-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.r-row:last-child{border-bottom:0}
+.r-row img,.r-row .ph{width:46px;height:69px;border-radius:8px;object-fit:cover;background:var(--panel);flex:none;display:grid;place-items:center;color:var(--muted)}
+.r-info{flex:1;min-width:0}
+.r-title{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.r-meta{color:var(--muted);font-size:.85rem}
+.r-add{border:0;border-radius:999px;padding:9px 14px;background:var(--accent);color:var(--accent-ink);font-weight:600;flex:none}
+.r-add.done{background:transparent;color:var(--avail);border:1px solid var(--line)}
+.r-msg{padding:16px;color:var(--muted)}
+
+.tabs{display:flex;gap:6px;margin:14px 0 10px;background:var(--panel);padding:5px;border-radius:999px;border:1px solid var(--line)}
+.tabs button{flex:1;border:0;background:transparent;padding:10px;border-radius:999px;font-weight:600;color:var(--muted)}
+.tabs button.active{background:var(--accent);color:var(--accent-ink)}
+.tabs .cnt{opacity:.75;font-weight:500;margin-left:4px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.chips{display:flex;gap:6px}
+.chip{border:1px solid var(--line);background:transparent;padding:7px 14px;border-radius:999px;font-size:.9rem;color:var(--muted)}
+.chip.active{border-color:var(--text);color:var(--text)}
+select{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:.9rem}
+
+.list{display:flex;flex-direction:column;gap:10px;padding-bottom:20px}
+.card{display:flex;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:10px;align-items:stretch;cursor:pointer;transition:transform .12s}
+.card:active{transform:scale(.99)}
+.poster{width:84px;height:126px;border-radius:10px;object-fit:cover;background:var(--panel2);flex:none}
+.poster.ph{display:grid;place-items:center;color:var(--muted);font-size:1.8rem}
+.info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;padding:2px 0}
+.type{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.card h3{margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.15rem;line-height:1.2}
+.status{font-weight:600;font-size:.95rem;margin-top:auto}
+.status.soon{color:var(--soon)} .status.avail{color:var(--avail)} .status.rent{color:var(--rent)} .status.out,.status.tbd{color:var(--out)}
+.sub{font-size:.82rem;color:var(--muted)}
+.provs{display:flex;gap:5px;margin-top:4px}
+.provs img{width:26px;height:26px;border-radius:50%}
+.seen-btn{align-self:center;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);flex:none;display:grid;place-items:center;color:var(--muted)}
+.seen-btn svg{width:22px;height:22px}
+.seen-btn.on{background:var(--avail);color:#06210f;border-color:var(--avail)}
+.empty{text-align:center;color:var(--muted);padding:40px 16px;line-height:1.6}
+
+.setup{background:var(--panel);border:1px solid var(--accent);border-radius:var(--radius);padding:18px;margin:16px 0}
+.setup h2{font-family:'Bricolage Grotesque',sans-serif;margin:0 0 8px}
+.setup p{color:var(--muted);line-height:1.55;margin:0 0 12px}
+.field{display:flex;gap:8px;flex-wrap:wrap}
+.field input{flex:1;min-width:200px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);outline:none}
+.field input:focus{border-color:var(--accent)}
+.btn{border:0;border-radius:12px;padding:12px 16px;background:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn.ghost{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.btn.danger{background:transparent;color:var(--danger);border:1px solid var(--danger)}
+.btn.armed{background:var(--danger);color:#fff}
+body.nokey .needs-key{display:none}
+
+footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(env(safe-area-inset-bottom) + 24px);border-top:1px solid var(--line);margin-top:10px}
+
+.sheet{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center}
+.sheet[hidden]{display:none}
+.sheet-bg{position:absolute;inset:0;background:rgba(0,0,0,.6)}
+.sheet-panel{position:relative;background:var(--panel);width:100%;max-width:760px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;
+  padding-bottom:calc(env(safe-area-inset-bottom) + 20px);animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+.sheet-close{position:absolute;top:12px;right:12px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:1.1rem}
+.backdrop{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:var(--panel2);
+  -webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)}
+.sheet-body{padding:0 18px}
+.sheet-body.nobd{padding-top:56px}
+.sheet h2{font-family:'Bricolage Grotesque',sans-serif;font-size:1.7rem;margin:0 0 2px;line-height:1.15}
+.orig{color:var(--muted);font-size:.9rem;margin-bottom:8px}
+.meta{color:var(--muted);font-size:.9rem;margin:6px 0 10px}
+.genres{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.genres span{font-size:.8rem;padding:4px 10px;border-radius:999px;background:var(--panel2);color:var(--muted)}
+.big-status{font-size:1.1rem;font-weight:600;margin:4px 0 12px}
+.overview{line-height:1.6;margin:0 0 16px}
+.lang-note{font-size:.8rem;color:var(--muted)}
+.sec-title{font-size:.8rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:16px 0 8px}
+.prov-row{display:flex;gap:10px;flex-wrap:wrap}
+.prov{display:flex;align-items:center;gap:8px;background:var(--panel2);padding:6px 12px 6px 6px;border-radius:999px;font-size:.9rem}
+.prov img{width:28px;height:28px;border-radius:50%}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.actions .btn,.actions a.btn{text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.small{font-size:.82rem;color:var(--muted)}
+.set-sec{padding:16px 0;border-bottom:1px solid var(--line)}
+.set-sec:last-child{border-bottom:0}
+.set-sec h3{margin:0 0 8px;font-size:1rem}
+.set-sec p{color:var(--muted);margin:0 0 10px;line-height:1.5;font-size:.92rem}
+
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 24px);transform:translateX(-50%);background:var(--text);color:var(--bg);
+  padding:12px 18px;border-radius:999px;font-weight:600;z-index:60;max-width:90vw;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.toast[hidden]{display:none}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-inner">
+    <div class="brand">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="32" fill="#f5b83d"/><path d="M25 20 L46 32 L25 44 Z" fill="#0f1115"/></svg>
+      <h1>Se sen</h1>
+    </div>
+    <div class="top-actions">
+      <button id="btnRefresh" class="icon-btn needs-key" title="Uppdatera info" aria-label="Uppdatera info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 4v5h-5"/></svg>
+      </button>
+      <button id="btnSettings" class="icon-btn" title="Inställningar" aria-label="Inställningar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="setup" class="setup" hidden>
+    <h2>Välkommen till Se sen! 🍿</h2>
+    <p>Här samlar du filmer och serier du vill se. Sidan hämtar affischer, beskrivningar, premiärdatum och var de finns att streama från TMDB.</p>
+    <p>Först behöver du en gratis API-nyckel från TMDB. Klistra in den här nedanför. Nyckeln sparas bara i din webbläsare, inte i någon fil.</p>
+    <div class="field">
+      <input id="setupKey" type="password" placeholder="Klistra in API-nyckeln här" autocomplete="off" spellcheck="false">
+      <button id="setupSave" class="btn">Spara</button>
+    </div>
+    <p class="small" style="margin-top:10px">Ingen nyckel än? Den skaffar du på <a href="https://www.themoviedb.org/settings/api" target="_blank" rel="noopener">themoviedb.org/settings/api</a>.</p>
+  </section>
+
+  <div class="search-wrap needs-key">
+    <svg class="s-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="Sök film eller serie…" autocomplete="off" enterkeyhint="search">
+    <div id="results" class="results" hidden></div>
+  </div>
+
+  <nav class="tabs needs-key">
+    <button data-tab="todo" class="active">Att se<span id="cntTodo" class="cnt"></span></button>
+    <button data-tab="seen">Sedda<span id="cntSeen" class="cnt"></span></button>
+  </nav>
+
+  <div class="toolbar needs-key">
+    <div class="chips">
+      <button class="chip active" data-f="all">Alla</button>
+      <button class="chip" data-f="movie">Filmer</button>
+      <button class="chip" data-f="tv">Serier</button>
+    </div>
+    <select id="sort" aria-label="Sortering">
+      <option value="soon">Kommer snart först</option>
+      <option value="added">Senast tillagd</option>
+      <option value="title">Titel A–Ö</option>
+    </select>
+  </div>
+
+  <div id="list" class="list needs-key"></div>
+  <p id="empty" class="empty needs-key" hidden></p>
+
+  <footer>
+    Film- och seriedata kommer från <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a>.
+    Den här sidan använder TMDB:s API men är inte godkänd eller certifierad av TMDB.
+    Information om var filmer och serier finns att se kommer från <a href="https://www.justwatch.com/se" target="_blank" rel="noopener">JustWatch</a>.
+  </footer>
+</main>
+
+<div id="sheet" class="sheet" hidden>
+  <div class="sheet-bg" data-close></div>
+  <div class="sheet-panel" role="dialog" aria-modal="true">
+    <button class="sheet-close" data-close aria-label="Stäng">✕</button>
+    <div id="sheetContent"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ---------- Lagring i webbläsaren ---------- */
+  const LS = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+  };
+  const K_ITEMS = 'seSen.items', K_KEY = 'seSen.tmdbKey', K_CACHE = 'seSen.cache', K_SORT = 'seSen.sort';
+  const TTL = 6 * 3600 * 1000; // info hämtas om var 6:e timme
+
+  let items = LS.get(K_ITEMS, []);
+  let tmdbKey = LS.get(K_KEY, '');
+  let cache = LS.get(K_CACHE, {});
+  let tab = 'todo', filter = 'all', sortBy = LS.get(K_SORT, 'soon');
+
+  const saveItems = () => LS.set(K_ITEMS, items);
+  const saveCache = () => { if (!LS.set(K_CACHE, cache)) { cache = {}; LS.set(K_CACHE, cache); } };
+
+  const $ = s => document.querySelector(s);
+  const IMG = 'https://image.tmdb.org/t/p/';
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const keyOf = it => it.type + ':' + it.id;
+  const det = it => (cache[keyOf(it)] || {}).d || null;
+
+  /* ---------- Datum (ÅÅÅÅ-MM-DD) ---------- */
+  const pad = n => String(n).padStart(2, '0');
+  const fmtDate = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  const today = () => fmtDate(new Date());
+  function daysUntil(s) {
+    if (!s) return null;
+    const [y, m, d] = s.slice(0, 10).split('-').map(Number);
+    if (!y) return null;
+    const t = new Date(y, m - 1, d), n = new Date(); n.setHours(0, 0, 0, 0);
+    return Math.round((t - n) / 86400000);
+  }
+  function inDays(n) {
+    if (n === 0) return 'i dag';
+    if (n === 1) return 'i morgon';
+    if (n > 60) { const m = Math.round(n / 30); return 'om ' + m + (m === 1 ? ' månad' : ' månader'); }
+    return 'om ' + n + ' dagar';
+  }
+
+  /* ---------- TMDB ---------- */
+  async function tmdb(path, params = {}) {
+    if (!tmdbKey) throw new Error('nokey');
+    const url = new URL('https://api.themoviedb.org/3' + path);
+    for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
+    const headers = { accept: 'application/json' };
+    // Fungerar med både "API Read Access Token" (lång, börjar på eyJ) och "API Key" (kort)
+    if (tmdbKey.startsWith('eyJ')) headers.Authorization = 'Bearer ' + tmdbKey;
+    else url.searchParams.set('api_key', tmdbKey);
+    let r;
+    try { r = await fetch(url, { headers }); } catch (e) { throw new Error('network'); }
+    if (r.status === 401) throw new Error('badkey');
+    if (!r.ok) throw new Error('http' + r.status);
+    return r.json();
+  }
+
+  function errText(e) {
+    const m = e && e.message;
+    if (m === 'badkey') return 'API-nyckeln fungerar inte. Öppna Inställningar ⚙ och kolla den.';
+    if (m === 'network') return 'Kunde inte nå TMDB. Är du ansluten till internet?';
+    if (m === 'nokey') return 'Lägg in din API-nyckel först.';
+    return 'Något gick fel när info hämtades (' + (m || 'okänt fel') + ').';
+  }
+
+  function providersSE(d) {
+    const p = d['watch/providers'] && d['watch/providers'].results && d['watch/providers'].results.SE;
+    const out = { stream: [], rent: [], buy: [], link: p ? p.link : null };
+    if (!p) return out;
+    const map = a => (a || []).slice().sort((x, y) => (x.display_priority ?? 99) - (y.display_priority ?? 99))
+      .map(x => ({ name: x.provider_name, logo: x.logo_path }));
+    const seen = new Set();
+    out.stream = [...map(p.flatrate), ...map(p.free), ...map(p.ads)].filter(x => !seen.has(x.name) && seen.add(x.name));
+    out.rent = map(p.rent);
+    out.buy = map(p.buy);
+    return out;
+  }
+
+  function pickTrailer(v) {
+    const yt = ((v && v.results) || []).filter(x => x.site === 'YouTube');
+    const t = yt.find(x => x.type === 'Trailer' && x.iso_639_1 === 'sv') || yt.find(x => x.type === 'Trailer') ||
+              yt.find(x => x.type === 'Teaser') || yt[0];
+    return t ? t.key : null;
+  }
+
+  function seDates(d) {
+    const out = { bio: null, digital: null };
+    const se = ((d.release_dates && d.release_dates.results) || []).find(x => x.iso_3166_1 === 'SE');
+    if (!se) return out;
+    for (const r of se.release_dates || []) {
+      const ds = (r.release_date || '').slice(0, 10);
+      if (!ds) continue;
+      if ((r.type === 2 || r.type === 3) && (!out.bio || ds < out.bio)) out.bio = ds;
+      if (r.type === 4 && (!out.digital || ds < out.digital)) out.digital = ds;
+    }
+    return out;
+  }
+
+  function normalize(type, d) {
+    const n = {
+      title: d.title || d.name || '',
+      original: d.original_title || d.original_name || '',
+      overview: d.overview || '', overviewLang: 'sv',
+      poster: d.poster_path || null, backdrop: d.backdrop_path || null,
+      rating: d.vote_average || 0, votes: d.vote_count || 0,
+      genres: (d.genres || []).map(g => g.name),
+      providers: providersSE(d), trailer: pickTrailer(d.videos)
+    };
+    if (type === 'movie') {
+      n.release = d.release_date || null;
+      n.year = (d.release_date || '').slice(0, 4);
+      n.runtime = d.runtime || 0;
+      Object.assign(n, seDates(d));
+    } else {
+      n.firstAir = d.first_air_date || null;
+      n.year = (d.first_air_date || '').slice(0, 4);
+      n.seasons = d.number_of_seasons || 0;
+      n.tvStatus = d.status || '';
+      const ne = d.next_episode_to_air;
+      n.nextEp = ne && ne.air_date ? { date: ne.air_date, s: ne.season_number, e: ne.episode_number, name: ne.name } : null;
+    }
+    return n;
+  }
+
+  async function getDetails(it, force) {
+    const ck = keyOf(it), c = cache[ck];
+    if (!force && c && Date.now() - c.t < TTL) return c.d;
+    const append = it.type === 'movie' ? 'watch/providers,videos,release_dates' : 'watch/providers,videos';
+    const d = await tmdb('/' + it.type + '/' + it.id, { language: 'sv-SE', append_to_response: append, include_video_language: 'sv,en,null' });
+    const n = normalize(it.type, d);
+    if (!n.overview) {
+      try { const e = await tmdb('/' + it.type + '/' + it.id, { language: 'en-US' }); if (e.overview) { n.overview = e.overview; n.overviewLang = 'en'; } } catch (e) {}
+    }
+    cache[ck] = { t: Date.now(), d: n };
+    saveCache();
+    return n;
+  }
+
+  /* ---------- Status-text på korten ---------- */
+  function statusOf(it, n) {
+    if (!n) return { text: 'Hämtar info…', cls: 'tbd', key: 9e9 };
+    const st = n.providers.stream, rent = n.providers.rent;
+    const names = a => a.slice(0, 2).map(p => p.name).join(', ');
+    if (it.type === 'movie') {
+      const b = daysUntil(n.bio), dg = daysUntil(n.digital), r = daysUntil(n.release);
+      if (b != null && b >= 0) return { text: 'På bio ' + inDays(b), sub: 'Biopremiär ' + n.bio, cls: 'soon', key: b };
+      if (st.length) return { text: 'Finns på ' + names(st), cls: 'avail', key: 1e6 };
+      if (dg != null && dg >= 0) return { text: 'Digitalt ' + inDays(dg), sub: 'Släpps ' + n.digital, cls: 'soon', key: dg };
+      if (!n.bio && !n.digital && r != null && r >= 0) return { text: 'Premiär ' + inDays(r), sub: n.release, cls: 'soon', key: r };
+      if (b != null && b < 0 && b > -60) return { text: 'På bio nu', sub: 'Biopremiär ' + n.bio, cls: 'avail', key: 1e6 + 1 };
+      if (rent.length) return { text: 'Hyr på ' + names(rent), cls: 'rent', key: 2e6 };
+      if (!n.release) return { text: 'Datum inte satt', cls: 'tbd', key: 3e6 };
+      return { text: 'Ute', sub: 'Premiär ' + n.release, cls: 'out', key: 2.5e6 };
+    }
+    const ne = n.nextEp;
+    if (ne) {
+      const d = daysUntil(ne.date);
+      if (d != null && d >= 0) {
+        const head = ne.e === 1 ? ('Säsong ' + ne.s + ' ') : 'Nytt avsnitt ';
+        return { text: head + inDays(d), sub: 'S' + ne.s + 'E' + ne.e + ' · ' + ne.date, cls: 'soon', key: d };
+      }
+    }
+    const f = daysUntil(n.firstAir);
+    if (f != null && f >= 0) return { text: 'Premiär ' + inDays(f), sub: n.firstAir, cls: 'soon', key: f };
+    if (st.length) return { text: 'Finns på ' + names(st), cls: 'avail', key: 1e6 };
+    if (!n.firstAir) return { text: 'Datum inte satt', cls: 'tbd', key: 3e6 };
+    if (n.tvStatus === 'Ended' || n.tvStatus === 'Canceled') return { text: 'Avslutad serie', cls: 'out', key: 2.5e6 };
+    return { text: 'Pågår', cls: 'out', key: 2.5e6 };
+  }
+
+  /* ---------- Rita listan ---------- */
+  const ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+  function card(it) {
+    const n = det(it), s = statusOf(it, n);
+    const poster = (n && n.poster) || it.poster;
+    const title = (n && n.title) || it.title;
+    const year = (n && n.year) || it.year;
+    const provs = n ? n.providers.stream.slice(0, 4) : [];
+    return '<article class="card" data-key="' + esc(keyOf(it)) + '">' +
+      (poster ? '<img class="poster" loading="lazy" alt="" src="' + IMG + 'w185' + esc(poster) + '">' : '<div class="poster ph">🎬</div>') +
+      '<div class="info">' +
+        '<div class="type">' + (it.type === 'movie' ? 'Film' : 'Serie') + (year ? ' · ' + esc(year) : '') + '</div>' +
+        '<h3>' + esc(title) + '</h3>' +
+        (it.seen ? '<div class="status out">Sedd ' + esc(it.seenDate || '') + '</div>'
+                 : '<div class="status ' + s.cls + '">' + esc(s.text) + '</div>' + (s.sub ? '<div class="sub">' + esc(s.sub) + '</div>' : '')) +
+        (provs.length && !it.seen ? '<div class="provs">' + provs.map(p => p.logo ? '<img alt="' + esc(p.name) + '" title="' + esc(p.name) + '" src="' + IMG + 'w92' + esc(p.logo) + '">' : '').join('') + '</div>' : '') +
+      '</div>' +
+      '<button class="seen-btn' + (it.seen ? ' on' : '') + '" data-seen aria-label="' + (it.seen ? 'Flytta tillbaka till Att se' : 'Markera som sedd') + '">' + ICON_CHECK + '</button>' +
+    '</article>';
+  }
+
+  function render() {
+    document.body.classList.toggle('nokey', !tmdbKey);
+    $('#setup').hidden = !!tmdbKey;
+    const todo = items.filter(i => !i.seen), seen = items.filter(i => i.seen);
+    $('#cntTodo').textContent = todo.length ? ' ' + todo.length : '';
+    $('#cntSeen').textContent = seen.length ? ' ' + seen.length : '';
+    let arr = (tab === 'todo' ? todo : seen).filter(i => filter === 'all' || i.type === filter);
+    const tl = i => ((det(i) || {}).title || i.title || '');
+    if (sortBy === 'title') arr.sort((a, b) => tl(a).localeCompare(tl(b), 'sv'));
+    else if (sortBy === 'added') arr.sort((a, b) => (b.addedAt || 0) - (a.addedAt || 0));
+    else if (tab === 'seen') arr.sort((a, b) => (b.seenAt || 0) - (a.seenAt || 0));
+    else arr.sort((a, b) => statusOf(a, det(a)).key - statusOf(b, det(b)).key || tl(a).localeCompare(tl(b), 'sv'));
+    $('#list').innerHTML = arr.map(card).join('');
+    const empty = $('#empty');
+    empty.hidden = arr.length > 0;
+    if (!arr.length) {
+      empty.innerHTML = items.length === 0
+        ? 'Listan är tom.<br>Sök efter en film eller serie här ovanför och tryck <b>Lägg till</b>.'
+        : (tab === 'seen' ? 'Inget markerat som sett än.' : 'Inget här just nu.');
+    }
+  }
+
+  /* ---------- Hämta info för alla ---------- */
+  let loading = false;
+  async function loadAll(force) {
+    if (!tmdbKey || loading || !items.length) return;
+    loading = true;
+    $('#btnRefresh').classList.add('spin');
+    const queue = items.slice();
+    let firstErr = null, lastRender = 0;
+    async function worker() {
+      while (queue.length) {
+        const it = queue.shift();
+        try {
+          const n = await getDetails(it, force);
+          if (n.title) it.title = n.title;
+          if (n.poster) it.poster = n.poster;
+          if (n.year) it.year = n.year;
+        } catch (e) { firstErr = firstErr || e; if (e.message === 'badkey' || e.message === 'network') queue.length = 0; }
+        if (Date.now() - lastRender > 400) { lastRender = Date.now(); render(); }
+      }
+    }
+    await Promise.all([worker(), worker(), worker(), worker()]);
+    saveItems();
+    loading = false;
+    $('#btnRefresh').classList.remove('spin');
+    render();
+    if (firstErr) toast(errText(firstErr));
+    else if (force) toast('All info är uppdaterad');
+  }
+
+  /* ---------- Sök ---------- */
+  let sTimer = null, sSeq = 0, lastResults = [];
+  const q = $('#q'), results = $('#results');
+
+  q.addEventListener('input', () => {
+    clearTimeout(sTimer);
+    const v = q.value.trim();
+    if (v.length < 2) { results.hidden = true; return; }
+    sTimer = setTimeout(() => doSearch(v), 350);
+  });
+  q.addEventListener('keydown', e => { if (e.key === 'Escape') { q.value = ''; results.hidden = true; q.blur(); } });
+  q.addEventListener('focus', () => { if (q.value.trim().length >= 2 && results.innerHTML) results.hidden = false; });
+  document.addEventListener('click', e => { if (e.target.isConnected && !e.target.closest('.search-wrap')) results.hidden = true; });
+
+  async function doSearch(v) {
+    const my = ++sSeq;
+    results.hidden = false;
+    results.innerHTML = '<div class="r-msg">Söker…</div>';
+    try {
+      const d = await tmdb('/search/multi', { query: v, language: 'sv-SE', include_adult: 'false' });
+      if (my !== sSeq) return;
+      lastResults = (d.results || []).filter(x => x.media_type === 'movie' || x.media_type === 'tv').slice(0, 15);
+      renderResults();
+    } catch (e) {
+      if (my !== sSeq) return;
+      results.innerHTML = '<div class="r-msg">' + esc(errText(e)) + '</div>';
+    }
+  }
+
+  function renderResults() {
+    if (!lastResults.length) { results.innerHTML = '<div class="r-msg">Hittade inget. Prova en annan stavning eller originaltiteln.</div>'; return; }
+    results.innerHTML = lastResults.map((r, i) => {
+      const title = r.title || r.name || '';
+      const year = (r.release_date || r.first_air_date || '').slice(0, 4);
+      const has = items.some(it => it.id === r.id && it.type === r.media_type);
+      return '<div class="r-row">' +
+        (r.poster_path ? '<img alt="" src="' + IMG + 'w92' + esc(r.poster_path) + '">' : '<div class="ph">🎬</div>') +
+        '<div class="r-info"><div class="r-title">' + esc(title) + '</div>' +
+        '<div class="r-meta">' + (r.media_type === 'movie' ? 'Film' : 'Serie') + (year ? ' · ' + year : ' · inget datum än') + '</div></div>' +
+        (has ? '<button class="r-add done" disabled>✓ I listan</button>' : '<button class="r-add" data-add="' + i + '">Lägg till</button>') +
+      '</div>';
+    }).join('');
+  }
+
+  results.addEventListener('click', async e => {
+    const b = e.target.closest('[data-add]');
+    if (!b) return;
+    const r = lastResults[+b.dataset.add];
+    if (!r) return;
+    const it = {
+      id: r.id, type: r.media_type, title: r.title || r.name || '',
+      poster: r.poster_path || null, year: (r.release_date || r.first_air_date || '').slice(0, 4),
+      added: today(), addedAt: Date.now(), seen: false
+    };
+    items.unshift(it);
+    saveItems();
+    renderResults();
+    if (tab !== 'todo') setTab('todo'); else render();
+    toast('Tillagd: ' + it.title);
+    try {
+      const n = await getDetails(it);
+      if (n.title) it.title = n.title;
+      if (n.poster) it.poster = n.poster;
+      saveItems(); render();
+    } catch (err) { toast(errText(err)); }
+  });
+
+  /* ---------- Flikar, filter, sortering ---------- */
+  function setTab(t) {
+    tab = t;
+    document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === t));
+    render();
+  }
+  document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
+  document.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => {
+    filter = b.dataset.f;
+    document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c === b));
+    render();
+  }));
+  const sortSel = $('#sort');
+  sortSel.value = sortBy;
+  sortSel.addEventListener('change', () => { sortBy = sortSel.value; LS.set(K_SORT, sortBy); render(); });
+
+  /* ---------- Klick på kort ---------- */
+  $('#list').addEventListener('click', e => {
+    const c = e.target.closest('.card');
+    if (!c) return;
+    const it = items.find(i => keyOf(i) === c.dataset.key);
+    if (!it) return;
+    if (e.target.closest('[data-seen]')) { toggleSeen(it); return; }
+    openDetail(it);
+  });
+
+  function toggleSeen(it) {
+    it.seen = !it.seen;
+    if (it.seen) { it.seenDate = today(); it.seenAt = Date.now(); } else { delete it.seenDate; delete it.seenAt; }
+    saveItems(); render();
+    toast(it.seen ? 'Flyttad till Sedda' : 'Tillbaka i Att se');
+  }
+
+  /* ---------- Tvåstegsbekräftelse ---------- */
+  function armConfirm(btn, armedLabel, fn) {
+    if (btn.dataset.armed) { fn(); return; }
+    const old = btn.innerHTML;
+    btn.dataset.armed = '1';
+    btn.classList.add('armed');
+    btn.textContent = armedLabel;
+    setTimeout(() => { if (btn.isConnected && btn.dataset.armed) { delete btn.dataset.armed; btn.classList.remove('armed'); btn.innerHTML = old; } }, 4000);
+  }
+
+  /* ---------- Detaljvy ---------- */
+  const sheet = $('#sheet'), sheetContent = $('#sheetContent');
+  function openSheet(html) { sheetContent.innerHTML = html; sheet.hidden = false; sheet.querySelector('.sheet-panel').scrollTop = 0; document.body.style.overflow = 'hidden'; }
+  function closeSheet() { sheet.hidden = true; sheetContent.innerHTML = ''; document.body.style.overflow = ''; }
+  sheet.addEventListener('click', e => { if (e.target.closest('[data-close]')) closeSheet(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !sheet.hidden) closeSheet(); });
+
+  function provBlock(title, arr) {
+    if (!arr.length) return '';
+    return '<div class="sec-title">' + title + '</div><div class="prov-row">' +
+      arr.map(p => '<span class="prov">' + (p.logo ? '<img alt="" src="' + IMG + 'w92' + esc(p.logo) + '">' : '') + esc(p.name) + '</span>').join('') + '</div>';
+  }
+
+  function detailHtml(it, n) {
+    const s = statusOf(it, n);
+    const title = (n && n.title) || it.title;
+    const meta = [it.type === 'movie' ? 'Film' : 'Serie'];
+    if (n) {
+      if (n.year) meta.push(n.year);
+      if (it.type === 'movie' && n.runtime) meta.push(Math.floor(n.runtime / 60) + ' h ' + (n.runtime % 60) + ' min');
+      if (it.type === 'tv' && n.seasons) meta.push(n.seasons + (n.seasons === 1 ? ' säsong' : ' säsonger'));
+      if (n.votes > 0) meta.push('★ ' + n.rating.toLocaleString('sv-SE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }));
+    }
+    let h = '';
+    if (n && n.backdrop) h += '<img class="backdrop" alt="" src="' + IMG + 'w780' + esc(n.backdrop) + '">';
+    h += '<div class="sheet-body' + (n && n.backdrop ? '' : ' nobd') + '">';
+    h += '<h2>' + esc(title) + '</h2>';
+    if (n && n.original && n.original !== title) h += '<div class="orig">' + esc(n.original) + '</div>';
+    h += '<div class="meta">' + meta.map(esc).join(' · ') + '</div>';
+    if (n && n.genres.length) h += '<div class="genres">' + n.genres.map(g => '<span>' + esc(g) + '</span>').join('') + '</div>';
+    if (it.seen) h += '<div class="big-status status out">Sedd ' + esc(it.seenDate || '') + '</div>';
+    else h += '<div class="big-status status ' + s.cls + '">' + esc(s.text) + (s.sub ? ' <span class="small">· ' + esc(s.sub) + '</span>' : '') + '</div>';
+    if (n) {
+      if (n.overview) h += '<p class="overview">' + esc(n.overview) + (n.overviewLang === 'en' ? ' <span class="lang-note">(beskrivning finns bara på engelska)</span>' : '') + '</p>';
+      else h += '<p class="overview small">Ingen beskrivning än.</p>';
+      if (it.type === 'tv' && n.nextEp) h += '<div class="sec-title">Nästa avsnitt</div><div>S' + n.nextEp.s + 'E' + n.nextEp.e + (n.nextEp.name ? ' – ' + esc(n.nextEp.name) : '') + ' · ' + esc(n.nextEp.date) + '</div>';
+      if (it.type === 'movie' && (n.bio || n.digital)) {
+        h += '<div class="sec-title">Datum i Sverige</div><div>' +
+          (n.bio ? 'Bio: ' + esc(n.bio) : '') + (n.bio && n.digital ? '<br>' : '') + (n.digital ? 'Digitalt: ' + esc(n.digital) : '') + '</div>';
+      }
+      const p = n.providers;
+      h += provBlock('Streama i Sverige', p.stream) + provBlock('Hyr', p.rent) + provBlock('Köp', p.buy);
+      if (!p.stream.length && !p.rent.length && !p.buy.length) h += '<div class="sec-title">Var kan jag se den?</div><div class="small">Finns inte att streama i Sverige än.</div>';
+    } else {
+      h += '<p class="overview small">Info hämtas…</p>';
+    }
+    h += '<div class="actions">';
+    h += '<button class="btn" data-act="seen">' + (it.seen ? 'Flytta tillbaka till Att se' : '✓ Markera som sedd') + '</button>';
+    if (n && n.trailer) h += '<a class="btn ghost" href="https://www.youtube.com/watch?v=' + esc(n.trailer) + '" target="_blank" rel="noopener">▶ Trailer</a>';
+    h += '<a class="btn ghost" href="https://www.themoviedb.org/' + it.type + '/' + it.id + '?language=sv-SE" target="_blank" rel="noopener">Mer på TMDB</a>';
+    h += '<button class="btn danger" data-act="remove">Ta bort</button>';
+    h += '</div>';
+    h += '<p class="small" style="margin-top:16px">Tillagd ' + esc(it.added || '') + '</p>';
+    h += '</div>';
+    return h;
+  }
+
+  async function openDetail(it) {
+    openSheet(detailHtml(it, det(it)));
+    bindDetail(it);
+    if (!det(it)) {
+      try { await getDetails(it); if (!sheet.hidden) { sheetContent.innerHTML = detailHtml(it, det(it)); bindDetail(it); } render(); }
+      catch (e) { toast(errText(e)); }
+    }
+  }
+
+  function bindDetail(it) {
+    sheetContent.querySelector('[data-act="seen"]').addEventListener('click', () => { toggleSeen(it); closeSheet(); });
+    const rm = sheetContent.querySelector('[data-act="remove"]');
+    rm.addEventListener('click', () => armConfirm(rm, 'Tryck igen för att ta bort', () => {
+      items = items.filter(i => i !== it);
+      saveItems(); closeSheet(); render();
+      toast('Borttagen: ' + it.title);
+    }));
+  }
+
+  /* ---------- Inställningar ---------- */
+  function openSettings() {
+    openSheet(
+      '<div class="sheet-body nobd"><h2>Inställningar</h2>' +
+      '<div class="set-sec"><h3>TMDB API-nyckel</h3>' +
+        '<p>Nyckeln sparas bara i den här webbläsaren. Du kan använda antingen <b>API Key</b> (kort) eller <b>API Read Access Token</b> (lång).</p>' +
+        '<div class="field"><input id="setKey" type="password" autocomplete="off" spellcheck="false" placeholder="Klistra in nyckeln" value="' + esc(tmdbKey) + '">' +
+        '<button class="btn" id="setKeySave">Spara och testa</button></div>' +
+        '<p class="small" style="margin-top:8px"><label><input type="checkbox" id="showKey"> Visa nyckeln</label></p></div>' +
+      '<div class="set-sec"><h3>Säkerhetskopia</h3>' +
+        '<p>Listan sparas i den här webbläsaren. Ladda ner en kopia då och då, så att den inte försvinner om du rensar webbläsaren eller byter mobil.</p>' +
+        '<div class="actions" style="margin-top:0"><button class="btn ghost" id="bkDown">⬇ Ladda ner kopia</button>' +
+        '<button class="btn ghost" id="bkUp">⬆ Läs in kopia</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div>' +
+        '<p class="small" id="bkMsg" style="margin-top:8px"></p></div>' +
+      '<div class="set-sec"><h3>Om</h3><p>' + items.length + ' titlar i listan. Info från TMDB hämtas om var 6:e timme, eller när du trycker på uppdatera-knappen.</p></div>' +
+      '</div>'
+    );
+    const keyIn = $('#setKey');
+    $('#showKey').addEventListener('change', e => { keyIn.type = e.target.checked ? 'text' : 'password'; });
+    $('#setKeySave').addEventListener('click', () => saveKey(keyIn.value, true));
+    $('#bkDown').addEventListener('click', downloadBackup);
+    $('#bkUp').addEventListener('click', () => $('#bkFile').click());
+    $('#bkFile').addEventListener('change', importBackup);
+  }
+
+  async function saveKey(raw, fromSettings) {
+    const k = String(raw || '').trim();
+    if (!k) { toast('Klistra in en nyckel först'); return; }
+    const prev = tmdbKey;
+    tmdbKey = k;
+    try {
+      await tmdb('/configuration');
+      LS.set(K_KEY, tmdbKey);
+      toast('Nyckeln fungerar! 🎉');
+      if (fromSettings) closeSheet();
+      render();
+      loadAll(false);
+      if (!fromSettings) setTimeout(() => q.focus(), 300);
+    } catch (e) {
+      tmdbKey = prev;
+      toast(e.message === 'badkey' ? 'Nyckeln godkändes inte. Kolla att du kopierat hela.' : errText(e));
+    }
+  }
+
+  function downloadBackup() {
+    const data = JSON.stringify({ app: 'se-sen', version: 1, exported: today(), items }, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'se-sen-' + today() + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    $('#bkMsg').textContent = 'Kopian heter se-sen-' + today() + '.json och ligger bland dina nedladdningar.';
+  }
+
+  function importBackup(e) {
+    const f = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      let data;
+      try { data = JSON.parse(reader.result); } catch (err) { $('#bkMsg').textContent = 'Filen gick inte att läsa. Är det rätt fil?'; return; }
+      const list = Array.isArray(data) ? data : data.items;
+      if (!Array.isArray(list) || !list.every(x => x && x.id && (x.type === 'movie' || x.type === 'tv'))) {
+        $('#bkMsg').textContent = 'Filen ser inte ut som en kopia från Se sen.'; return;
+      }
+      const msg = $('#bkMsg');
+      msg.innerHTML = '⚠️ Din nuvarande lista med <b>' + items.length + '</b> titlar ersätts av kopian med <b>' + list.length + '</b> titlar. ' +
+        '<button class="btn danger" id="bkConfirm" style="margin-top:8px">Ersätt min lista</button>';
+      const b = $('#bkConfirm');
+      b.addEventListener('click', () => armConfirm(b, 'Säker? Tryck igen', () => {
+        items = list;
+        saveItems(); closeSheet(); render(); loadAll(false);
+        toast('Kopian är inläst (' + list.length + ' titlar)');
+      }));
+    };
+    reader.readAsText(f);
+  }
+
+  $('#btnSettings').addEventListener('click', openSettings);
+  $('#btnRefresh').addEventListener('click', () => loadAll(true));
+  $('#setupSave').addEventListener('click', () => saveKey($('#setupKey').value, false));
+  $('#setupKey').addEventListener('keydown', e => { if (e.key === 'Enter') saveKey($('#setupKey').value, false); });
+
+  /* ---------- Toast ---------- */
+  let tTimer;
+  function toast(msg) {
+    const t = $('#toast');
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(tTimer); tTimer = setTimeout(() => { t.hidden = true; }, 2800);
+  }
+
+  /* ---------- Start ---------- */
+  render();
+  loadAll(false);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) { render(); loadAll(false); } });
+})();
+</script>
+</body>
+</html>
