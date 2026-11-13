@@ -127,14 +127,15 @@ body.ingennyckel .kravernyckel{display:none}
 footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-align:center}
 
 /* Detaljvy (glider upp nerifrån) */
-.ark{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center}
+.ark{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;padding-top:calc(env(safe-area-inset-top,0px) + 16px)}
 .ark[hidden]{display:none}
 .ark-bg{position:absolute;inset:0;background:rgba(10,20,35,.55)}
-.ark-panel{position:relative;background:var(--bg);width:100%;max-width:640px;max-height:92vh;overflow:auto;border-radius:28px 28px 0 0;
-  padding-bottom:calc(env(safe-area-inset-bottom,0px) + 24px)}
+.ark-panel{position:relative;background:var(--bg);width:100%;max-width:640px;max-height:100%;display:flex;flex-direction:column;overflow:hidden;border-radius:28px 28px 0 0}
+/* Bara innehållet scrollar – stäng-knappen ligger alltid kvar överst */
+#arkInnehall{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 24px)}
 @media (prefers-reduced-motion:no-preference){.ark-panel{animation:upp .2s ease-out}}
 @keyframes upp{from{transform:translateY(40px);opacity:0}}
-.ark-stang{position:absolute;top:14px;right:14px;z-index:2}
+.ark-stang{position:absolute;top:14px;right:14px;z-index:2;box-shadow:0 2px 8px rgba(0,0,0,.18)}
 .bakgrund{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:var(--card);
   -webkit-mask-image:linear-gradient(#000 62%,transparent);mask-image:linear-gradient(#000 62%,transparent)}
 .ark-body{padding:0 18px}
@@ -754,7 +755,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
 
   /* ---------- Detaljvy ---------- */
   const ark = $('#ark'), arkInnehall = $('#arkInnehall');
-  function openSheet(html) { arkInnehall.innerHTML = html; ark.hidden = false; ark.querySelector('.ark-panel').scrollTop = 0; document.body.style.overflow = 'hidden'; }
+  function openSheet(html) { arkInnehall.innerHTML = html; ark.hidden = false; arkInnehall.scrollTop = 0; document.body.style.overflow = 'hidden'; }
   function closeSheet() { ark.hidden = true; arkInnehall.innerHTML = ''; document.body.style.overflow = ''; }
   ark.addEventListener('click', e => { if (e.target.closest('[data-stang]')) closeSheet(); });
   document.addEventListener('keydown', e => {
