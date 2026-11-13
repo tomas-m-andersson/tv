@@ -1,8 +1,19 @@
 {
   "app": "tv",
   "version": 2,
-  "uppdaterad": "2026-11-13T17:35:33.632Z",
+  "uppdaterad": "2026-11-13T18:00:59.987Z",
   "items": [
+    {
+      "id": 1101383,
+      "type": "movie",
+      "title": "The End of Oak Street",
+      "poster": "/wl4eHvDfcJW1VWDQKpseYEBLQdF.jpg",
+      "year": "2026",
+      "added": "2026-11-13",
+      "addedAt": 1794592858026,
+      "seen": false,
+      "updatedAt": 1794592858027
+    },
     {
       "id": 233742,
       "type": "tv",
