@@ -1,0 +1,87 @@
+{
+  "app": "tv",
+  "version": 2,
+  "uppdaterad": "2026-11-13T17:35:33.632Z",
+  "items": [
+    {
+      "id": 233742,
+      "type": "tv",
+      "title": "Newtopia",
+      "poster": "/ilBndopP8kfpmhmlWDoR6xs5fKa.jpg",
+      "year": "2025",
+      "added": "2026-11-13",
+      "addedAt": 1794590590287,
+      "seen": false
+    },
+    {
+      "id": 1477836,
+      "type": "movie",
+      "title": "Bone Keeper",
+      "poster": "/fTUloMRssypzehEwNBjVegvCLTy.jpg",
+      "year": "2026",
+      "added": "2026-11-13",
+      "addedAt": 1794590568729,
+      "seen": false
+    },
+    {
+      "id": 1418657,
+      "type": "movie",
+      "title": "The Yeti",
+      "poster": "/zaqEfoKcWkVni2eONhJ7DRhMO8Q.jpg",
+      "year": "2026",
+      "added": "2026-11-13",
+      "addedAt": 1794590565543,
+      "seen": false
+    },
+    {
+      "id": 1510745,
+      "type": "movie",
+      "title": "Bodycam",
+      "poster": "/xFpBNcG3Dlr8mYF5Kz9Tizs3Pxn.jpg",
+      "year": "2026",
+      "added": "2026-11-13",
+      "addedAt": 1794590560219,
+      "seen": false
+    },
+    {
+      "id": 1470130,
+      "type": "movie",
+      "title": "The Mortuary Assistant",
+      "poster": "/72AoFPC5TY4DfJwXXS9rPwPeReD.jpg",
+      "year": "2026",
+      "added": "2026-11-13",
+      "addedAt": 1794590556255,
+      "seen": false
+    },
+    {
+      "id": 1408208,
+      "type": "movie",
+      "title": "Exit 8",
+      "poster": "/hRyu0gm0d12F2OEe4m1qxlMwSs2.jpg",
+      "year": "2025",
+      "added": "2026-11-13",
+      "addedAt": 1794590550341,
+      "seen": false
+    },
+    {
+      "id": 1321883,
+      "type": "movie",
+      "title": "In a Violent Nature: Part 2",
+      "poster": "/scxO00Kj3JglUyKYODEywmRM9fx.jpg",
+      "year": "2027",
+      "added": "2026-11-13",
+      "addedAt": 1794590545308,
+      "seen": false
+    },
+    {
+      "id": 1423191,
+      "type": "movie",
+      "title": "Resident Evil",
+      "poster": "/rEd9cm9B8yKhFrjJIib9gcCDlZh.jpg",
+      "year": "2026",
+      "added": "2026-11-13",
+      "addedAt": 1794590158200,
+      "seen": false
+    }
+  ]
+}
