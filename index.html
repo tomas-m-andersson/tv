@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#e8f2fb">
-<title>Se sen</title>
+<title>TV</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-maskable-512.png">
@@ -166,7 +166,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
 <body>
 <main>
   <div class="top">
-    <h1>Se sen</h1>
+    <h1>TV</h1>
     <div class="icons">
       <button id="btnTema" class="rund" type="button"></button>
       <button id="btnUppdatera" class="rund kravernyckel" type="button" aria-label="Uppdatera info" title="Uppdatera info">
@@ -180,7 +180,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
   <p class="sub" id="dagtext">Filmer och serier att se</p>
 
   <section id="valkommen" class="valkommen" hidden>
-    <h2>Välkommen till Se sen! 🍿</h2>
+    <h2>Välkommen till TV! 🍿</h2>
     <p>Här samlar du filmer och serier du vill se. Sidan hämtar affischer, beskrivningar, premiärdatum och var de finns att streama från TMDB.</p>
     <p>Klistra in din gratis API-nyckel från TMDB här nedanför. Nyckeln sparas bara i din webbläsare, inte i någon fil.</p>
     <div class="falt">
@@ -767,14 +767,14 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
   }
 
   function downloadBackup() {
-    const data = JSON.stringify({ app: 'se-sen', version: 1, exported: today(), items }, null, 2);
+    const data = JSON.stringify({ app: 'tv', version: 1, exported: today(), items }, null, 2);
     const blob = new Blob([data], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'se-sen-' + today() + '.json';
+    a.download = 'tv-lista-' + today() + '.json';
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-    $('#bkMsg').textContent = 'Kopian heter se-sen-' + today() + '.json och ligger bland dina nedladdningar.';
+    $('#bkMsg').textContent = 'Kopian heter tv-lista-' + today() + '.json och ligger bland dina nedladdningar.';
   }
 
   function importBackup(e) {
@@ -787,7 +787,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
       try { data = JSON.parse(reader.result); } catch (err) { $('#bkMsg').textContent = 'Filen gick inte att läsa. Är det rätt fil?'; return; }
       const list = Array.isArray(data) ? data : data.items;
       if (!Array.isArray(list) || !list.every(x => x && x.id && (x.type === 'movie' || x.type === 'tv'))) {
-        $('#bkMsg').textContent = 'Filen ser inte ut som en kopia från Se sen.'; return;
+        $('#bkMsg').textContent = 'Filen ser inte ut som en kopia från TV-appen.'; return;
       }
       askConfirm('Ersätta din lista?',
         'Din nuvarande lista med <b>' + items.length + '</b> titlar ersätts av kopian med <b>' + list.length + '</b> titlar. Det går inte att ångra.',
