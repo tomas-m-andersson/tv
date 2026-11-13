@@ -1022,8 +1022,6 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
 
   function syncSettingsHtml() {
     const l = syncLabel();
-    let matToken = '';
-    try { matToken = localStorage.getItem('ghtoken') || ''; } catch (e) {}
     return '<div class="sek inst"><h2>Synka mellan enheter</h2>' +
       '<div class="synkrad" id="synkStatus"><span class="prick ' + l.dot + '"></span><span>' + esc(l.text) + '</span></div>' +
       '<p>Listan sparas i filen <b>' + esc(gh.path) + '</b> i ditt GitHub-repo, så att mobilen, datorn och surfplattan visar samma lista. ' +
@@ -1035,7 +1033,6 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
       '<label class="etikett" for="ghTok">GitHub-token</label>' +
       '<input class="text" id="ghTok" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_…" value="' + esc(ghToken) + '">' +
       '<label class="kryss"><input type="checkbox" id="ghShow"> Visa token</label>' +
-      (matToken && !ghToken ? '<div class="atgarder"><button type="button" class="knapp" id="ghFromMat">Använd samma token som Mat-appen</button></div>' : '') +
       '<p class="liten" style="margin:12px 0 0">Token sparas bara i webbläsaren på den här enheten, aldrig i repot. Den som har token kan ändra filerna i repot, så dela den inte.</p>' +
       '<div class="atgarder"><button type="button" class="knapp main" id="ghSave">Spara och synka</button>' +
         (ghToken ? '<button type="button" class="knapp" id="ghNow">Synka nu</button><button type="button" class="knapp farlig" id="ghForget">Ta bort token</button>' : '') +
@@ -1045,11 +1042,6 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
   function bindSyncSettings() {
     const tok = $('#ghTok');
     $('#ghShow').addEventListener('change', e => { tok.type = e.target.checked ? 'text' : 'password'; });
-    const fromMat = document.getElementById('ghFromMat');
-    if (fromMat) fromMat.addEventListener('click', () => {
-      try { tok.value = localStorage.getItem('ghtoken') || ''; } catch (e) {}
-      toast('Token från Mat-appen är ifylld. Tryck Spara och synka.');
-    });
     $('#ghSave').addEventListener('click', async () => {
       const repoTxt = $('#ghRepo').value.trim().replace(/^https?:\/\/github\.com\//, '').replace(/\/+$/, '');
       const parts = repoTxt.split('/');
