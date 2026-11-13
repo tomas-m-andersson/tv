@@ -3,178 +3,209 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0f1115">
+<meta name="theme-color" content="#e8f2fb">
 <title>Se sen</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23f5b83d'/%3E%3Cpath d='M25 20 L46 32 L25 44 Z' fill='%230f1115'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-maskable-512.png">
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <style>
-:root{
-  --bg:#0f1115; --panel:#181b22; --panel2:#20242d; --line:#2a2f3a;
-  --text:#eef0f4; --muted:#9aa1ae; --accent:#f5b83d; --accent-ink:#1a1405;
-  --soon:#f5b83d; --avail:#4fd18b; --rent:#7fb2ff; --out:#9aa1ae; --danger:#ff6b6b;
-  --radius:16px;
-}
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;font-size:16px;-webkit-tap-highlight-color:transparent}
+/* Färger och typsnitt som i Mat-appen */
+:root{--bg:#e8f2fb;--card:#ffffff;--ink:#1a2433;--mut:#5a6b80;--line:#cfdcea;--acc:#2563d6;--accink:#ffffff;--helg:#ffd84d;--helgink:#3a2c00;--danger:#b4232a;
+  --c-soon:#f08a24;--c-avail:#2f9e5b;--c-rent:#1f8fd1;--c-seen:#6e56cf;--c-out:#8fa3b8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101a28;--card:#1a2638;--ink:#eaf1fb;--mut:#9fb1c8;--line:#2b3b52;--acc:#7aa8ff;--accink:#0a1a38;--helg:#e0b92f;--helgink:#241b00;--danger:#ff8a8f;--c-out:#5d7290}}
+:root[data-theme="dark"]{--bg:#101a28;--card:#1a2638;--ink:#eaf1fb;--mut:#9fb1c8;--line:#2b3b52;--acc:#7aa8ff;--accink:#0a1a38;--helg:#e0b92f;--helgink:#241b00;--danger:#ff8a8f;--c-out:#5d7290}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.5 ui-rounded,"SF Pro Rounded","Nunito","Segoe UI",system-ui,sans-serif;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
-a{color:var(--accent)}
-.wrap{max-width:760px;margin:0 auto;padding:0 16px}
-header.top{position:sticky;top:0;z-index:20;background:rgba(15,17,21,.92);backdrop-filter:blur(10px);
-  padding:calc(env(safe-area-inset-top) + 12px) 0 12px;border-bottom:1px solid var(--line)}
-.top-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand{display:flex;align-items:center;gap:10px}
-.brand svg{width:34px;height:34px;flex:none}
-h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.6rem;margin:0;letter-spacing:-.02em}
-.icon-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center}
-.icon-btn svg{width:20px;height:20px}
-.icon-btn.spin svg{animation:spin 1s linear infinite}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+a{color:var(--acc);font-weight:600}
+main{max-width:640px;margin:0 auto;padding:28px 18px 48px}
+
+/* Rubrikrad */
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px}
+h1{font-size:clamp(2.4rem,9vw,3.6rem);line-height:1;margin:0;font-weight:800;letter-spacing:-.02em;color:var(--acc)}
+.sub{color:var(--mut);margin:0 0 22px;font-size:.92rem;font-weight:700}
+.icons{display:flex;gap:8px;flex:none}
+.rund{width:44px;height:44px;padding:0;border-radius:50%;display:grid;place-items:center;flex:none;
+  border:2px solid var(--line);background:var(--card);color:var(--ink)}
+.rund svg{width:22px;height:22px;display:block}
+.rund.spin svg{animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.top-actions{display:flex;gap:8px}
 
-.search-wrap{position:relative;margin:16px 0 8px}
-.search-wrap input{width:100%;padding:14px 16px 14px 46px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:1rem;outline:none}
-.search-wrap input:focus{border-color:var(--accent)}
-.search-wrap .s-ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--muted);pointer-events:none}
-.results{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius);
-  max-height:65vh;overflow:auto;z-index:30;box-shadow:0 20px 50px rgba(0,0,0,.5)}
-.r-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:1px solid var(--line)}
-.r-row:last-child{border-bottom:0}
-.r-row img,.r-row .ph{width:46px;height:69px;border-radius:8px;object-fit:cover;background:var(--panel);flex:none;display:grid;place-items:center;color:var(--muted)}
+/* Knappar */
+.knapp{height:44px;padding:0 18px;border-radius:999px;border:2px solid #8fa3b8;border-color:color-mix(in srgb,var(--ink) 38%,var(--card));
+  background:var(--card);color:var(--ink);font-weight:700;font-size:.95rem;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.knapp.main{background:var(--acc);color:var(--accink);border-color:var(--acc);font-weight:800}
+.knapp.farlig{color:var(--danger);border-color:var(--danger)}
+.knapp svg{width:18px;height:18px}
+
+/* Sök */
+.sokvapper{position:relative;margin:0 0 14px}
+.sok{width:100%;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:999px;padding:11px 18px 11px 48px;outline:none;-webkit-appearance:none;appearance:none}
+.sok:focus{border-color:var(--acc)}
+.sokikon{position:absolute;left:17px;top:50%;transform:translateY(-50%);width:22px;height:22px;color:var(--mut);pointer-events:none}
+.resultat{position:absolute;left:0;right:0;top:calc(100% + 8px);background:var(--card);border-radius:20px;max-height:65vh;overflow:auto;z-index:30;
+  box-shadow:0 2px 0 var(--line),0 14px 40px rgba(0,0,0,.25)}
+.r-rad{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.r-rad:last-child{border-bottom:0}
+.r-rad img,.r-rad .ph{width:46px;height:69px;border-radius:10px;object-fit:cover;background:var(--bg);flex:none;display:grid;place-items:center;color:var(--mut)}
 .r-info{flex:1;min-width:0}
-.r-title{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.r-meta{color:var(--muted);font-size:.85rem}
-.r-add{border:0;border-radius:999px;padding:9px 14px;background:var(--accent);color:var(--accent-ink);font-weight:600;flex:none}
-.r-add.done{background:transparent;color:var(--avail);border:1px solid var(--line)}
-.r-msg{padding:16px;color:var(--muted)}
+.r-titel{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.r-meta{color:var(--mut);font-size:.85rem}
+.r-add{height:40px;padding:0 16px;border-radius:999px;border:2px solid var(--acc);background:var(--acc);color:var(--accink);font-weight:800;font-size:.9rem;flex:none}
+.r-add.klar{background:var(--card);color:var(--c-avail);border-color:var(--line)}
+.r-msg{padding:16px 18px;color:var(--mut)}
 
-.tabs{display:flex;gap:6px;margin:14px 0 10px;background:var(--panel);padding:5px;border-radius:999px;border:1px solid var(--line)}
-.tabs button{flex:1;border:0;background:transparent;padding:10px;border-radius:999px;font-weight:600;color:var(--muted)}
-.tabs button.active{background:var(--accent);color:var(--accent-ink)}
-.tabs .cnt{opacity:.75;font-weight:500;margin-left:4px}
-.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
-.chips{display:flex;gap:6px}
-.chip{border:1px solid var(--line);background:transparent;padding:7px 14px;border-radius:999px;font-size:.9rem;color:var(--muted)}
-.chip.active{border-color:var(--text);color:var(--text)}
-select{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:.9rem}
+/* Flikar (som Mat-appens meny) */
+.appnav{display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--card);box-shadow:0 2px 0 var(--line);margin:0 0 14px}
+.appnav button{flex:1;height:44px;border:0;border-radius:999px;background:transparent;color:var(--mut);font-weight:700;font-size:15px}
+.appnav button[aria-current="page"]{background:var(--acc);color:var(--accink);font-weight:800}
+.antal{opacity:.8;margin-left:4px}
 
-.list{display:flex;flex-direction:column;gap:10px;padding-bottom:20px}
-.card{display:flex;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:10px;align-items:stretch;cursor:pointer;transition:transform .12s}
-.card:active{transform:scale(.99)}
-.poster{width:84px;height:126px;border-radius:10px;object-fit:cover;background:var(--panel2);flex:none}
-.poster.ph{display:grid;place-items:center;color:var(--muted);font-size:1.8rem}
-.info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;padding:2px 0}
-.type{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.card h3{margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.15rem;line-height:1.2}
-.status{font-weight:600;font-size:.95rem;margin-top:auto}
-.status.soon{color:var(--soon)} .status.avail{color:var(--avail)} .status.rent{color:var(--rent)} .status.out,.status.tbd{color:var(--out)}
-.sub{font-size:.82rem;color:var(--muted)}
-.provs{display:flex;gap:5px;margin-top:4px}
-.provs img{width:26px;height:26px;border-radius:50%}
-.seen-btn{align-self:center;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);flex:none;display:grid;place-items:center;color:var(--muted)}
-.seen-btn svg{width:22px;height:22px}
-.seen-btn.on{background:var(--avail);color:#06210f;border-color:var(--avail)}
-.empty{text-align:center;color:var(--muted);padding:40px 16px;line-height:1.6}
+/* Filter och sortering */
+.verktyg{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 18px}
+.filter{display:flex;gap:8px}
+.filter button{padding:5px 14px;border-radius:999px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-size:.92rem}
+.filter button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--accink);font-weight:700}
+select{background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:999px;padding:6px 12px;font-size:.92rem}
 
-.setup{background:var(--panel);border:1px solid var(--accent);border-radius:var(--radius);padding:18px;margin:16px 0}
-.setup h2{font-family:'Bricolage Grotesque',sans-serif;margin:0 0 8px}
-.setup p{color:var(--muted);line-height:1.55;margin:0 0 12px}
-.field{display:flex;gap:8px;flex-wrap:wrap}
-.field input{flex:1;min-width:200px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);outline:none}
-.field input:focus{border-color:var(--accent)}
-.btn{border:0;border-radius:12px;padding:12px 16px;background:var(--accent);color:var(--accent-ink);font-weight:600}
-.btn.ghost{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
-.btn.danger{background:transparent;color:var(--danger);border:1px solid var(--danger)}
-.btn.armed{background:var(--danger);color:#fff}
-body.nokey .needs-key{display:none}
+/* Kort */
+.lista{display:grid;gap:10px}
+.kort{--dc:var(--c-out);display:flex;gap:14px;align-items:center;background:var(--card);border-radius:20px;
+  box-shadow:inset 8px 0 0 var(--dc),0 2px 0 var(--line);padding:12px 12px 12px 22px;cursor:pointer}
+.kort.soon{--dc:var(--c-soon)} .kort.avail{--dc:var(--c-avail)} .kort.rent{--dc:var(--c-rent)} .kort.sedd{--dc:var(--c-seen)}
+@media (prefers-reduced-motion:no-preference){.kort{transition:transform .15s}.kort:active{transform:scale(.985)}}
+.poster{width:78px;height:117px;border-radius:14px;object-fit:cover;background:var(--bg);flex:none}
+.poster.ph{display:grid;place-items:center;color:var(--mut)}
+.poster.ph svg{width:30px;height:30px}
+.info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.typ{font-size:.82rem;font-weight:700;color:var(--mut)}
+.kort h3{margin:0;font-size:1.1rem;font-weight:700;line-height:1.2;overflow-wrap:anywhere}
+.badge{align-self:flex-start;margin-top:4px;padding:3px 11px;border-radius:999px;font-size:.82rem;font-weight:800;
+  background:color-mix(in srgb,var(--dc) 20%,var(--card));color:var(--ink)}
+.liten{font-size:.85rem;color:var(--mut)}
+.loggor{display:flex;gap:5px;margin-top:2px}
+.loggor img{width:24px;height:24px;border-radius:50%}
+.bock{width:44px;height:44px;padding:0;border-radius:50%;display:grid;place-items:center;flex:none;
+  border:2px solid #8fa3b8;border-color:color-mix(in srgb,var(--ink) 38%,var(--card));background:var(--card);color:var(--mut)}
+.bock svg{width:22px;height:22px}
+.bock.pa{background:var(--c-seen);border-color:var(--c-seen);color:#fff}
+.tomt{text-align:center;color:var(--mut);margin:36px 0;font-size:1.05rem;line-height:1.6}
 
-footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(env(safe-area-inset-bottom) + 24px);border-top:1px solid var(--line);margin-top:10px}
+/* Välkomstruta */
+.valkommen{background:var(--card);border-radius:24px;box-shadow:0 2px 0 var(--line);padding:18px 20px;margin:8px 0 14px}
+.valkommen h2{margin:0 0 8px;font-size:1.3rem}
+.valkommen p{color:var(--mut);margin:0 0 12px}
+.falt{display:flex;gap:8px;flex-wrap:wrap}
+.falt input{flex:1;min-width:200px;background:var(--bg);color:var(--ink);border:2px solid var(--line);border-radius:14px;padding:10px 14px;outline:none}
+.falt input:focus{border-color:var(--acc)}
+body.ingennyckel .kravernyckel{display:none}
 
-.sheet{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center}
-.sheet[hidden]{display:none}
-.sheet-bg{position:absolute;inset:0;background:rgba(0,0,0,.6)}
-.sheet-panel{position:relative;background:var(--panel);width:100%;max-width:760px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;
-  padding-bottom:calc(env(safe-area-inset-bottom) + 20px);animation:up .22s ease-out}
-@keyframes up{from{transform:translateY(40px);opacity:0}}
-.sheet-close{position:absolute;top:12px;right:12px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:1.1rem}
-.backdrop{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:var(--panel2);
-  -webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)}
-.sheet-body{padding:0 18px}
-.sheet-body.nobd{padding-top:56px}
-.sheet h2{font-family:'Bricolage Grotesque',sans-serif;font-size:1.7rem;margin:0 0 2px;line-height:1.15}
-.orig{color:var(--muted);font-size:.9rem;margin-bottom:8px}
-.meta{color:var(--muted);font-size:.9rem;margin:6px 0 10px}
-.genres{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.genres span{font-size:.8rem;padding:4px 10px;border-radius:999px;background:var(--panel2);color:var(--muted)}
-.big-status{font-size:1.1rem;font-weight:600;margin:4px 0 12px}
-.overview{line-height:1.6;margin:0 0 16px}
-.lang-note{font-size:.8rem;color:var(--muted)}
-.sec-title{font-size:.8rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:16px 0 8px}
-.prov-row{display:flex;gap:10px;flex-wrap:wrap}
-.prov{display:flex;align-items:center;gap:8px;background:var(--panel2);padding:6px 12px 6px 6px;border-radius:999px;font-size:.9rem}
+footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-align:center}
+
+/* Detaljvy (glider upp nerifrån) */
+.ark{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center}
+.ark[hidden]{display:none}
+.ark-bg{position:absolute;inset:0;background:rgba(10,20,35,.55)}
+.ark-panel{position:relative;background:var(--bg);width:100%;max-width:640px;max-height:92vh;overflow:auto;border-radius:28px 28px 0 0;
+  padding-bottom:calc(env(safe-area-inset-bottom,0px) + 24px)}
+@media (prefers-reduced-motion:no-preference){.ark-panel{animation:upp .2s ease-out}}
+@keyframes upp{from{transform:translateY(40px);opacity:0}}
+.ark-stang{position:absolute;top:14px;right:14px;z-index:2}
+.bakgrund{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:var(--card);
+  -webkit-mask-image:linear-gradient(#000 62%,transparent);mask-image:linear-gradient(#000 62%,transparent)}
+.ark-body{padding:0 18px}
+.ark-body.utanbild{padding-top:68px}
+.ark h2.rubrik{font-size:clamp(1.9rem,7vw,2.5rem);line-height:1.1;margin:0 0 4px;font-weight:800;letter-spacing:-.01em}
+.orig{color:var(--mut);margin-bottom:8px}
+.meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 14px}
+.pill{background:var(--card);border:2px solid var(--line);border-radius:999px;padding:0 12px;font-size:.88rem;color:var(--mut)}
+.pill.acc{color:var(--acc);font-weight:700}
+.sek{background:var(--card);border-radius:20px;padding:16px 18px 18px;margin-top:14px;box-shadow:0 2px 0 var(--line)}
+.sek h3{margin:0 0 8px;font-size:1.05rem}
+.sek.status{--dc:var(--c-out);box-shadow:inset 8px 0 0 var(--dc),0 2px 0 var(--line);padding-left:26px}
+.sek.status.soon{--dc:var(--c-soon)} .sek.status.avail{--dc:var(--c-avail)} .sek.status.rent{--dc:var(--c-rent)} .sek.status.sedd{--dc:var(--c-seen)}
+.storstatus{font-size:1.25rem;font-weight:800;line-height:1.2}
+.beskrivning{margin:0;line-height:1.6}
+.prov-rad{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.prov-rad:last-child{margin-bottom:0}
+.prov{display:flex;align-items:center;gap:8px;background:var(--bg);padding:5px 12px 5px 5px;border-radius:999px;font-size:.92rem;font-weight:600}
 .prov img{width:28px;height:28px;border-radius:50%}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
-.actions .btn,.actions a.btn{text-decoration:none;display:inline-flex;align-items:center;gap:6px}
-.small{font-size:.82rem;color:var(--muted)}
-.set-sec{padding:16px 0;border-bottom:1px solid var(--line)}
-.set-sec:last-child{border-bottom:0}
-.set-sec h3{margin:0 0 8px;font-size:1rem}
-.set-sec p{color:var(--muted);margin:0 0 10px;line-height:1.5;font-size:.92rem}
+.provtyp{font-size:.82rem;font-weight:700;color:var(--mut);margin:0 0 6px}
+.atgarder{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.inst h2{margin:0 0 6px;font-size:1.1rem}
+.inst p{color:var(--mut);margin:0 0 10px;font-size:.95rem}
+.kryss{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:.92rem;color:var(--mut)}
+.kryss input{width:22px;height:22px;accent-color:var(--acc);margin:0}
 
-.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 24px);transform:translateX(-50%);background:var(--text);color:var(--bg);
-  padding:12px 18px;border-radius:999px;font-weight:600;z-index:60;max-width:90vw;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.4)}
-.toast[hidden]{display:none}
+/* Bekräftelseruta (som i Mat-appen) */
+.fraga{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:20px}
+.fraga[hidden]{display:none}
+.fraga-bg{position:absolute;inset:0;background:rgba(10,20,35,.55)}
+.fraga-ruta{position:relative;background:var(--card);border-radius:28px;padding:28px 22px 20px;width:min(90vw,380px);text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+@media (prefers-reduced-motion:no-preference){.fraga-ruta{animation:fragaIn .18s ease-out}}
+@keyframes fragaIn{from{opacity:0;transform:translateY(12px) scale(.96)}}
+.fikon{width:64px;height:64px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;background:color-mix(in srgb,var(--danger) 18%,transparent);color:var(--danger)}
+.fikon svg{width:30px;height:30px}
+.fraga h2{font-size:1.3rem;margin:0 0 8px}
+.fraga p{color:var(--mut);line-height:1.45;margin:0}
+.fraga .knappar{display:flex;gap:10px;margin-top:22px}
+.fraga .knappar button{flex:1;padding:13px 10px;border-radius:999px;font-weight:700;border:2px solid var(--line);background:var(--card);color:var(--ink)}
+.fraga .knappar .farlig{background:var(--danger);border-color:var(--danger);color:var(--card)}
+
+/* Meddelande längst ner */
+#msg{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:80;max-width:min(90vw,520px);margin:0;
+  padding:10px 18px;border-radius:20px;background:var(--ink);color:var(--bg);font-weight:600;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.25);pointer-events:none}
+#msg[hidden]{display:none}
 </style>
 </head>
 <body>
-
-<header class="top">
-  <div class="wrap top-inner">
-    <div class="brand">
-      <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="32" fill="#f5b83d"/><path d="M25 20 L46 32 L25 44 Z" fill="#0f1115"/></svg>
-      <h1>Se sen</h1>
-    </div>
-    <div class="top-actions">
-      <button id="btnRefresh" class="icon-btn needs-key" title="Uppdatera info" aria-label="Uppdatera info">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 4v5h-5"/></svg>
+<main>
+  <div class="top">
+    <h1>Se sen</h1>
+    <div class="icons">
+      <button id="btnTema" class="rund" type="button"></button>
+      <button id="btnUppdatera" class="rund kravernyckel" type="button" aria-label="Uppdatera info" title="Uppdatera info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 4v5h-5"/></svg>
       </button>
-      <button id="btnSettings" class="icon-btn" title="Inställningar" aria-label="Inställningar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      <button id="btnInst" class="rund" type="button" aria-label="Inställningar" title="Inställningar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
       </button>
     </div>
   </div>
-</header>
+  <p class="sub" id="dagtext">Filmer och serier att se</p>
 
-<main class="wrap">
-  <section id="setup" class="setup" hidden>
+  <section id="valkommen" class="valkommen" hidden>
     <h2>Välkommen till Se sen! 🍿</h2>
     <p>Här samlar du filmer och serier du vill se. Sidan hämtar affischer, beskrivningar, premiärdatum och var de finns att streama från TMDB.</p>
-    <p>Först behöver du en gratis API-nyckel från TMDB. Klistra in den här nedanför. Nyckeln sparas bara i din webbläsare, inte i någon fil.</p>
-    <div class="field">
-      <input id="setupKey" type="password" placeholder="Klistra in API-nyckeln här" autocomplete="off" spellcheck="false">
-      <button id="setupSave" class="btn">Spara</button>
+    <p>Klistra in din gratis API-nyckel från TMDB här nedanför. Nyckeln sparas bara i din webbläsare, inte i någon fil.</p>
+    <div class="falt">
+      <input id="startNyckel" type="password" placeholder="Klistra in API-nyckeln här" autocomplete="off" spellcheck="false">
+      <button id="startSpara" class="knapp main" type="button">Spara</button>
     </div>
-    <p class="small" style="margin-top:10px">Ingen nyckel än? Den skaffar du på <a href="https://www.themoviedb.org/settings/api" target="_blank" rel="noopener">themoviedb.org/settings/api</a>.</p>
+    <p class="liten" style="margin:12px 0 0">Ingen nyckel än? Den skaffar du på <a href="https://www.themoviedb.org/settings/api" target="_blank" rel="noopener">themoviedb.org/settings/api</a>.</p>
   </section>
 
-  <div class="search-wrap needs-key">
-    <svg class="s-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    <input id="q" type="search" placeholder="Sök film eller serie…" autocomplete="off" enterkeyhint="search">
-    <div id="results" class="results" hidden></div>
+  <div class="sokvapper kravernyckel">
+    <svg class="sokikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" class="sok" type="search" placeholder="Sök film eller serie…" autocomplete="off" enterkeyhint="search">
+    <div id="resultat" class="resultat" hidden></div>
   </div>
 
-  <nav class="tabs needs-key">
-    <button data-tab="todo" class="active">Att se<span id="cntTodo" class="cnt"></span></button>
-    <button data-tab="seen">Sedda<span id="cntSeen" class="cnt"></span></button>
+  <nav class="appnav kravernyckel" aria-label="Listor">
+    <button type="button" data-tab="todo" aria-current="page">Att se<span id="antTodo" class="antal"></span></button>
+    <button type="button" data-tab="seen">Sedda<span id="antSeen" class="antal"></span></button>
   </nav>
 
-  <div class="toolbar needs-key">
-    <div class="chips">
-      <button class="chip active" data-f="all">Alla</button>
-      <button class="chip" data-f="movie">Filmer</button>
-      <button class="chip" data-f="tv">Serier</button>
+  <div class="verktyg kravernyckel">
+    <div class="filter">
+      <button type="button" data-f="all" aria-pressed="true">Alla</button>
+      <button type="button" data-f="movie" aria-pressed="false">Filmer</button>
+      <button type="button" data-f="tv" aria-pressed="false">Serier</button>
     </div>
     <select id="sort" aria-label="Sortering">
       <option value="soon">Kommer snart först</option>
@@ -183,8 +214,8 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
     </select>
   </div>
 
-  <div id="list" class="list needs-key"></div>
-  <p id="empty" class="empty needs-key" hidden></p>
+  <div id="lista" class="lista kravernyckel"></div>
+  <p id="tomt" class="tomt kravernyckel" hidden></p>
 
   <footer>
     Film- och seriedata kommer från <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a>.
@@ -193,15 +224,27 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
   </footer>
 </main>
 
-<div id="sheet" class="sheet" hidden>
-  <div class="sheet-bg" data-close></div>
-  <div class="sheet-panel" role="dialog" aria-modal="true">
-    <button class="sheet-close" data-close aria-label="Stäng">✕</button>
-    <div id="sheetContent"></div>
+<div id="ark" class="ark" hidden>
+  <div class="ark-bg" data-stang></div>
+  <div class="ark-panel" role="dialog" aria-modal="true">
+    <button class="rund ark-stang" data-stang type="button" aria-label="Stäng">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div id="arkInnehall"></div>
   </div>
 </div>
 
-<div id="toast" class="toast" hidden></div>
+<div id="fraga" class="fraga" hidden>
+  <div class="fraga-bg" data-nej></div>
+  <div class="fraga-ruta" role="alertdialog" aria-modal="true" aria-labelledby="fragaRubrik">
+    <div class="fikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></div>
+    <h2 id="fragaRubrik"></h2>
+    <p id="fragaText"></p>
+    <div class="knappar"><button type="button" data-nej>Avbryt</button><button type="button" class="farlig" id="fragaJa"></button></div>
+  </div>
+</div>
+
+<p id="msg" hidden></p>
 
 <script>
 (() => {
@@ -229,6 +272,27 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
   const keyOf = it => it.type + ':' + it.id;
   const det = it => (cache[keyOf(it)] || {}).d || null;
 
+  /* ---------- Tema (samma inställning som Mat-appen) ---------- */
+  const SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+  const SUN = SVG + '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  const MOON = SVG + '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+  const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === 'dark' : mq.matches; };
+  function paintTheme() {
+    const d = isDark(), b = $('#btnTema'), tl = d ? 'Byt till ljust läge' : 'Byt till mörkt läge';
+    b.innerHTML = d ? SUN : MOON;
+    b.setAttribute('aria-label', tl); b.title = tl;
+    document.querySelector('meta[name="theme-color"]').content = d ? '#101a28' : '#e8f2fb';
+  }
+  $('#btnTema').addEventListener('click', () => {
+    const n = isDark() ? 'light' : 'dark';
+    document.documentElement.dataset.theme = n;
+    try { localStorage.setItem('theme', n); } catch (e) {}
+    paintTheme();
+  });
+  if (mq.addEventListener) mq.addEventListener('change', paintTheme);
+  paintTheme();
+
   /* ---------- Datum (ÅÅÅÅ-MM-DD) ---------- */
   const pad = n => String(n).padStart(2, '0');
   const fmtDate = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
@@ -246,6 +310,11 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
     if (n > 60) { const m = Math.round(n / 30); return 'om ' + m + (m === 1 ? ' månad' : ' månader'); }
     return 'om ' + n + ' dagar';
   }
+  (function dagtext() {
+    const d = new Date();
+    const dagar = ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag'];
+    $('#dagtext').textContent = dagar[d.getDay()] + ' ' + today();
+  })();
 
   /* ---------- TMDB ---------- */
   async function tmdb(path, params = {}) {
@@ -265,7 +334,7 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
 
   function errText(e) {
     const m = e && e.message;
-    if (m === 'badkey') return 'API-nyckeln fungerar inte. Öppna Inställningar ⚙ och kolla den.';
+    if (m === 'badkey') return 'API-nyckeln fungerar inte. Öppna Inställningar och kolla den.';
     if (m === 'network') return 'Kunde inte nå TMDB. Är du ansluten till internet?';
     if (m === 'nokey') return 'Lägg in din API-nyckel först.';
     return 'Något gick fel när info hämtades (' + (m || 'okänt fel') + ').';
@@ -346,7 +415,7 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
 
   /* ---------- Status-text på korten ---------- */
   function statusOf(it, n) {
-    if (!n) return { text: 'Hämtar info…', cls: 'tbd', key: 9e9 };
+    if (!n) return { text: 'Hämtar info…', cls: '', key: 9e9 };
     const st = n.providers.stream, rent = n.providers.rent;
     const names = a => a.slice(0, 2).map(p => p.name).join(', ');
     if (it.type === 'movie') {
@@ -357,8 +426,8 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
       if (!n.bio && !n.digital && r != null && r >= 0) return { text: 'Premiär ' + inDays(r), sub: n.release, cls: 'soon', key: r };
       if (b != null && b < 0 && b > -60) return { text: 'På bio nu', sub: 'Biopremiär ' + n.bio, cls: 'avail', key: 1e6 + 1 };
       if (rent.length) return { text: 'Hyr på ' + names(rent), cls: 'rent', key: 2e6 };
-      if (!n.release) return { text: 'Datum inte satt', cls: 'tbd', key: 3e6 };
-      return { text: 'Ute', sub: 'Premiär ' + n.release, cls: 'out', key: 2.5e6 };
+      if (!n.release) return { text: 'Datum inte satt', cls: '', key: 3e6 };
+      return { text: 'Ute', sub: 'Premiär ' + n.release, cls: '', key: 2.5e6 };
     }
     const ne = n.nextEp;
     if (ne) {
@@ -371,13 +440,14 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
     const f = daysUntil(n.firstAir);
     if (f != null && f >= 0) return { text: 'Premiär ' + inDays(f), sub: n.firstAir, cls: 'soon', key: f };
     if (st.length) return { text: 'Finns på ' + names(st), cls: 'avail', key: 1e6 };
-    if (!n.firstAir) return { text: 'Datum inte satt', cls: 'tbd', key: 3e6 };
-    if (n.tvStatus === 'Ended' || n.tvStatus === 'Canceled') return { text: 'Avslutad serie', cls: 'out', key: 2.5e6 };
-    return { text: 'Pågår', cls: 'out', key: 2.5e6 };
+    if (!n.firstAir) return { text: 'Datum inte satt', cls: '', key: 3e6 };
+    if (n.tvStatus === 'Ended' || n.tvStatus === 'Canceled') return { text: 'Avslutad serie', cls: '', key: 2.5e6 };
+    return { text: 'Pågår', cls: '', key: 2.5e6 };
   }
 
   /* ---------- Rita listan ---------- */
-  const ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  const ICON_CHECK = SVG.replace('stroke-width="2"', 'stroke-width="2.6"') + '<path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  const ICON_FILM = SVG + '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9.5l5 2.5-5 2.5z"/></svg>';
 
   function card(it) {
     const n = det(it), s = statusOf(it, n);
@@ -385,36 +455,37 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
     const title = (n && n.title) || it.title;
     const year = (n && n.year) || it.year;
     const provs = n ? n.providers.stream.slice(0, 4) : [];
-    return '<article class="card" data-key="' + esc(keyOf(it)) + '">' +
-      (poster ? '<img class="poster" loading="lazy" alt="" src="' + IMG + 'w185' + esc(poster) + '">' : '<div class="poster ph">🎬</div>') +
+    const cls = it.seen ? 'sedd' : s.cls;
+    return '<article class="kort ' + cls + '" data-key="' + esc(keyOf(it)) + '">' +
+      (poster ? '<img class="poster" loading="lazy" alt="" src="' + IMG + 'w185' + esc(poster) + '">' : '<div class="poster ph">' + ICON_FILM + '</div>') +
       '<div class="info">' +
-        '<div class="type">' + (it.type === 'movie' ? 'Film' : 'Serie') + (year ? ' · ' + esc(year) : '') + '</div>' +
+        '<div class="typ">' + (it.type === 'movie' ? 'Film' : 'Serie') + (year ? ' · ' + esc(year) : '') + '</div>' +
         '<h3>' + esc(title) + '</h3>' +
-        (it.seen ? '<div class="status out">Sedd ' + esc(it.seenDate || '') + '</div>'
-                 : '<div class="status ' + s.cls + '">' + esc(s.text) + '</div>' + (s.sub ? '<div class="sub">' + esc(s.sub) + '</div>' : '')) +
-        (provs.length && !it.seen ? '<div class="provs">' + provs.map(p => p.logo ? '<img alt="' + esc(p.name) + '" title="' + esc(p.name) + '" src="' + IMG + 'w92' + esc(p.logo) + '">' : '').join('') + '</div>' : '') +
+        (it.seen ? '<span class="badge">Sedd ' + esc(it.seenDate || '') + '</span>'
+                 : '<span class="badge">' + esc(s.text) + '</span>' + (s.sub ? '<div class="liten">' + esc(s.sub) + '</div>' : '')) +
+        (provs.length && !it.seen ? '<div class="loggor">' + provs.map(p => p.logo ? '<img alt="' + esc(p.name) + '" title="' + esc(p.name) + '" src="' + IMG + 'w92' + esc(p.logo) + '">' : '').join('') + '</div>' : '') +
       '</div>' +
-      '<button class="seen-btn' + (it.seen ? ' on' : '') + '" data-seen aria-label="' + (it.seen ? 'Flytta tillbaka till Att se' : 'Markera som sedd') + '">' + ICON_CHECK + '</button>' +
+      '<button type="button" class="bock' + (it.seen ? ' pa' : '') + '" data-seen aria-label="' + (it.seen ? 'Flytta tillbaka till Att se' : 'Markera som sedd') + '">' + ICON_CHECK + '</button>' +
     '</article>';
   }
 
   function render() {
-    document.body.classList.toggle('nokey', !tmdbKey);
-    $('#setup').hidden = !!tmdbKey;
+    document.body.classList.toggle('ingennyckel', !tmdbKey);
+    $('#valkommen').hidden = !!tmdbKey;
     const todo = items.filter(i => !i.seen), seen = items.filter(i => i.seen);
-    $('#cntTodo').textContent = todo.length ? ' ' + todo.length : '';
-    $('#cntSeen').textContent = seen.length ? ' ' + seen.length : '';
+    $('#antTodo').textContent = todo.length ? ' ' + todo.length : '';
+    $('#antSeen').textContent = seen.length ? ' ' + seen.length : '';
     let arr = (tab === 'todo' ? todo : seen).filter(i => filter === 'all' || i.type === filter);
     const tl = i => ((det(i) || {}).title || i.title || '');
     if (sortBy === 'title') arr.sort((a, b) => tl(a).localeCompare(tl(b), 'sv'));
     else if (sortBy === 'added') arr.sort((a, b) => (b.addedAt || 0) - (a.addedAt || 0));
     else if (tab === 'seen') arr.sort((a, b) => (b.seenAt || 0) - (a.seenAt || 0));
     else arr.sort((a, b) => statusOf(a, det(a)).key - statusOf(b, det(b)).key || tl(a).localeCompare(tl(b), 'sv'));
-    $('#list').innerHTML = arr.map(card).join('');
-    const empty = $('#empty');
-    empty.hidden = arr.length > 0;
+    $('#lista').innerHTML = arr.map(card).join('');
+    const tomt = $('#tomt');
+    tomt.hidden = arr.length > 0;
     if (!arr.length) {
-      empty.innerHTML = items.length === 0
+      tomt.innerHTML = items.length === 0
         ? 'Listan är tom.<br>Sök efter en film eller serie här ovanför och tryck <b>Lägg till</b>.'
         : (tab === 'seen' ? 'Inget markerat som sett än.' : 'Inget här just nu.');
     }
@@ -425,7 +496,7 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
   async function loadAll(force) {
     if (!tmdbKey || loading || !items.length) return;
     loading = true;
-    $('#btnRefresh').classList.add('spin');
+    $('#btnUppdatera').classList.add('spin');
     const queue = items.slice();
     let firstErr = null, lastRender = 0;
     async function worker() {
@@ -443,7 +514,7 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
     await Promise.all([worker(), worker(), worker(), worker()]);
     saveItems();
     loading = false;
-    $('#btnRefresh').classList.remove('spin');
+    $('#btnUppdatera').classList.remove('spin');
     render();
     if (firstErr) toast(errText(firstErr));
     else if (force) toast('All info är uppdaterad');
@@ -451,22 +522,22 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
 
   /* ---------- Sök ---------- */
   let sTimer = null, sSeq = 0, lastResults = [];
-  const q = $('#q'), results = $('#results');
+  const q = $('#q'), resultat = $('#resultat');
 
   q.addEventListener('input', () => {
     clearTimeout(sTimer);
     const v = q.value.trim();
-    if (v.length < 2) { results.hidden = true; return; }
+    if (v.length < 2) { resultat.hidden = true; return; }
     sTimer = setTimeout(() => doSearch(v), 350);
   });
-  q.addEventListener('keydown', e => { if (e.key === 'Escape') { q.value = ''; results.hidden = true; q.blur(); } });
-  q.addEventListener('focus', () => { if (q.value.trim().length >= 2 && results.innerHTML) results.hidden = false; });
-  document.addEventListener('click', e => { if (e.target.isConnected && !e.target.closest('.search-wrap')) results.hidden = true; });
+  q.addEventListener('keydown', e => { if (e.key === 'Escape') { q.value = ''; resultat.hidden = true; q.blur(); } });
+  q.addEventListener('focus', () => { if (q.value.trim().length >= 2 && resultat.innerHTML) resultat.hidden = false; });
+  document.addEventListener('click', e => { if (e.target.isConnected && !e.target.closest('.sokvapper')) resultat.hidden = true; });
 
   async function doSearch(v) {
     const my = ++sSeq;
-    results.hidden = false;
-    results.innerHTML = '<div class="r-msg">Söker…</div>';
+    resultat.hidden = false;
+    resultat.innerHTML = '<div class="r-msg">Söker…</div>';
     try {
       const d = await tmdb('/search/multi', { query: v, language: 'sv-SE', include_adult: 'false' });
       if (my !== sSeq) return;
@@ -474,26 +545,26 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
       renderResults();
     } catch (e) {
       if (my !== sSeq) return;
-      results.innerHTML = '<div class="r-msg">' + esc(errText(e)) + '</div>';
+      resultat.innerHTML = '<div class="r-msg">' + esc(errText(e)) + '</div>';
     }
   }
 
   function renderResults() {
-    if (!lastResults.length) { results.innerHTML = '<div class="r-msg">Hittade inget. Prova en annan stavning eller originaltiteln.</div>'; return; }
-    results.innerHTML = lastResults.map((r, i) => {
+    if (!lastResults.length) { resultat.innerHTML = '<div class="r-msg">Hittade inget. Prova en annan stavning eller originaltiteln.</div>'; return; }
+    resultat.innerHTML = lastResults.map((r, i) => {
       const title = r.title || r.name || '';
       const year = (r.release_date || r.first_air_date || '').slice(0, 4);
       const has = items.some(it => it.id === r.id && it.type === r.media_type);
-      return '<div class="r-row">' +
-        (r.poster_path ? '<img alt="" src="' + IMG + 'w92' + esc(r.poster_path) + '">' : '<div class="ph">🎬</div>') +
-        '<div class="r-info"><div class="r-title">' + esc(title) + '</div>' +
+      return '<div class="r-rad">' +
+        (r.poster_path ? '<img alt="" src="' + IMG + 'w92' + esc(r.poster_path) + '">' : '<div class="ph">' + ICON_FILM + '</div>') +
+        '<div class="r-info"><div class="r-titel">' + esc(title) + '</div>' +
         '<div class="r-meta">' + (r.media_type === 'movie' ? 'Film' : 'Serie') + (year ? ' · ' + year : ' · inget datum än') + '</div></div>' +
-        (has ? '<button class="r-add done" disabled>✓ I listan</button>' : '<button class="r-add" data-add="' + i + '">Lägg till</button>') +
+        (has ? '<button type="button" class="r-add klar" disabled>✓ I listan</button>' : '<button type="button" class="r-add" data-add="' + i + '">Lägg till</button>') +
       '</div>';
     }).join('');
   }
 
-  results.addEventListener('click', async e => {
+  resultat.addEventListener('click', async e => {
     const b = e.target.closest('[data-add]');
     if (!b) return;
     const r = lastResults[+b.dataset.add];
@@ -519,13 +590,15 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
   /* ---------- Flikar, filter, sortering ---------- */
   function setTab(t) {
     tab = t;
-    document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === t));
+    document.querySelectorAll('.appnav button').forEach(b => {
+      if (b.dataset.tab === t) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+    });
     render();
   }
-  document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
-  document.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.appnav button').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
+  document.querySelectorAll('.filter button').forEach(b => b.addEventListener('click', () => {
     filter = b.dataset.f;
-    document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c === b));
+    document.querySelectorAll('.filter button').forEach(c => c.setAttribute('aria-pressed', String(c === b)));
     render();
   }));
   const sortSel = $('#sort');
@@ -533,8 +606,8 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
   sortSel.addEventListener('change', () => { sortBy = sortSel.value; LS.set(K_SORT, sortBy); render(); });
 
   /* ---------- Klick på kort ---------- */
-  $('#list').addEventListener('click', e => {
-    const c = e.target.closest('.card');
+  $('#lista').addEventListener('click', e => {
+    const c = e.target.closest('.kort');
     if (!c) return;
     const it = items.find(i => keyOf(i) === c.dataset.key);
     if (!it) return;
@@ -549,69 +622,82 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
     toast(it.seen ? 'Flyttad till Sedda' : 'Tillbaka i Att se');
   }
 
-  /* ---------- Tvåstegsbekräftelse ---------- */
-  function armConfirm(btn, armedLabel, fn) {
-    if (btn.dataset.armed) { fn(); return; }
-    const old = btn.innerHTML;
-    btn.dataset.armed = '1';
-    btn.classList.add('armed');
-    btn.textContent = armedLabel;
-    setTimeout(() => { if (btn.isConnected && btn.dataset.armed) { delete btn.dataset.armed; btn.classList.remove('armed'); btn.innerHTML = old; } }, 4000);
+  /* ---------- Egen bekräftelseruta ---------- */
+  const fraga = $('#fraga');
+  let fragaFn = null;
+  function askConfirm(rubrik, text, jaText, fn) {
+    $('#fragaRubrik').textContent = rubrik;
+    $('#fragaText').innerHTML = text;
+    $('#fragaJa').textContent = jaText;
+    fragaFn = fn;
+    fraga.hidden = false;
+    $('#fragaJa').focus();
   }
+  fraga.addEventListener('click', e => { if (e.target.closest('[data-nej]')) { fraga.hidden = true; fragaFn = null; } });
+  $('#fragaJa').addEventListener('click', () => { const fn = fragaFn; fraga.hidden = true; fragaFn = null; if (fn) fn(); });
 
   /* ---------- Detaljvy ---------- */
-  const sheet = $('#sheet'), sheetContent = $('#sheetContent');
-  function openSheet(html) { sheetContent.innerHTML = html; sheet.hidden = false; sheet.querySelector('.sheet-panel').scrollTop = 0; document.body.style.overflow = 'hidden'; }
-  function closeSheet() { sheet.hidden = true; sheetContent.innerHTML = ''; document.body.style.overflow = ''; }
-  sheet.addEventListener('click', e => { if (e.target.closest('[data-close]')) closeSheet(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !sheet.hidden) closeSheet(); });
+  const ark = $('#ark'), arkInnehall = $('#arkInnehall');
+  function openSheet(html) { arkInnehall.innerHTML = html; ark.hidden = false; ark.querySelector('.ark-panel').scrollTop = 0; document.body.style.overflow = 'hidden'; }
+  function closeSheet() { ark.hidden = true; arkInnehall.innerHTML = ''; document.body.style.overflow = ''; }
+  ark.addEventListener('click', e => { if (e.target.closest('[data-stang]')) closeSheet(); });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (!fraga.hidden) { fraga.hidden = true; fragaFn = null; } else if (!ark.hidden) closeSheet();
+  });
 
   function provBlock(title, arr) {
     if (!arr.length) return '';
-    return '<div class="sec-title">' + title + '</div><div class="prov-row">' +
+    return '<p class="provtyp">' + title + '</p><div class="prov-rad">' +
       arr.map(p => '<span class="prov">' + (p.logo ? '<img alt="" src="' + IMG + 'w92' + esc(p.logo) + '">' : '') + esc(p.name) + '</span>').join('') + '</div>';
   }
 
   function detailHtml(it, n) {
     const s = statusOf(it, n);
     const title = (n && n.title) || it.title;
-    const meta = [it.type === 'movie' ? 'Film' : 'Serie'];
+    const pills = ['<span class="pill acc">' + (it.type === 'movie' ? 'Film' : 'Serie') + '</span>'];
     if (n) {
-      if (n.year) meta.push(n.year);
-      if (it.type === 'movie' && n.runtime) meta.push(Math.floor(n.runtime / 60) + ' h ' + (n.runtime % 60) + ' min');
-      if (it.type === 'tv' && n.seasons) meta.push(n.seasons + (n.seasons === 1 ? ' säsong' : ' säsonger'));
-      if (n.votes > 0) meta.push('★ ' + n.rating.toLocaleString('sv-SE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }));
+      if (n.year) pills.push('<span class="pill">' + esc(n.year) + '</span>');
+      if (it.type === 'movie' && n.runtime) pills.push('<span class="pill">' + Math.floor(n.runtime / 60) + ' h ' + (n.runtime % 60) + ' min</span>');
+      if (it.type === 'tv' && n.seasons) pills.push('<span class="pill">' + n.seasons + (n.seasons === 1 ? ' säsong' : ' säsonger') + '</span>');
+      if (n.votes > 0) pills.push('<span class="pill">★ ' + n.rating.toLocaleString('sv-SE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '</span>');
+      n.genres.forEach(g => pills.push('<span class="pill">' + esc(g) + '</span>'));
     }
     let h = '';
-    if (n && n.backdrop) h += '<img class="backdrop" alt="" src="' + IMG + 'w780' + esc(n.backdrop) + '">';
-    h += '<div class="sheet-body' + (n && n.backdrop ? '' : ' nobd') + '">';
-    h += '<h2>' + esc(title) + '</h2>';
+    if (n && n.backdrop) h += '<img class="bakgrund" alt="" src="' + IMG + 'w780' + esc(n.backdrop) + '">';
+    h += '<div class="ark-body' + (n && n.backdrop ? '' : ' utanbild') + '">';
+    h += '<h2 class="rubrik">' + esc(title) + '</h2>';
     if (n && n.original && n.original !== title) h += '<div class="orig">' + esc(n.original) + '</div>';
-    h += '<div class="meta">' + meta.map(esc).join(' · ') + '</div>';
-    if (n && n.genres.length) h += '<div class="genres">' + n.genres.map(g => '<span>' + esc(g) + '</span>').join('') + '</div>';
-    if (it.seen) h += '<div class="big-status status out">Sedd ' + esc(it.seenDate || '') + '</div>';
-    else h += '<div class="big-status status ' + s.cls + '">' + esc(s.text) + (s.sub ? ' <span class="small">· ' + esc(s.sub) + '</span>' : '') + '</div>';
+    h += '<div class="meta">' + pills.join('') + '</div>';
+
+    h += '<div class="sek status ' + (it.seen ? 'sedd' : s.cls) + '"><div class="storstatus">' +
+      (it.seen ? 'Sedd ' + esc(it.seenDate || '') : esc(s.text)) + '</div>' +
+      (!it.seen && s.sub ? '<div class="liten">' + esc(s.sub) + '</div>' : '') + '</div>';
+
     if (n) {
-      if (n.overview) h += '<p class="overview">' + esc(n.overview) + (n.overviewLang === 'en' ? ' <span class="lang-note">(beskrivning finns bara på engelska)</span>' : '') + '</p>';
-      else h += '<p class="overview small">Ingen beskrivning än.</p>';
-      if (it.type === 'tv' && n.nextEp) h += '<div class="sec-title">Nästa avsnitt</div><div>S' + n.nextEp.s + 'E' + n.nextEp.e + (n.nextEp.name ? ' – ' + esc(n.nextEp.name) : '') + ' · ' + esc(n.nextEp.date) + '</div>';
+      h += '<div class="sek"><h3>Handling</h3>' +
+        (n.overview ? '<p class="beskrivning">' + esc(n.overview) + (n.overviewLang === 'en' ? ' <span class="liten">(finns bara på engelska)</span>' : '') + '</p>'
+                    : '<p class="beskrivning liten">Ingen beskrivning än.</p>') + '</div>';
+      if (it.type === 'tv' && n.nextEp) h += '<div class="sek"><h3>Nästa avsnitt</h3><div>S' + n.nextEp.s + 'E' + n.nextEp.e + (n.nextEp.name ? ' – ' + esc(n.nextEp.name) : '') + '</div><div class="liten">' + esc(n.nextEp.date) + '</div></div>';
       if (it.type === 'movie' && (n.bio || n.digital)) {
-        h += '<div class="sec-title">Datum i Sverige</div><div>' +
-          (n.bio ? 'Bio: ' + esc(n.bio) : '') + (n.bio && n.digital ? '<br>' : '') + (n.digital ? 'Digitalt: ' + esc(n.digital) : '') + '</div>';
+        h += '<div class="sek"><h3>Datum i Sverige</h3><div>' +
+          (n.bio ? 'Bio: ' + esc(n.bio) : '') + (n.bio && n.digital ? '<br>' : '') + (n.digital ? 'Digitalt: ' + esc(n.digital) : '') + '</div></div>';
       }
       const p = n.providers;
-      h += provBlock('Streama i Sverige', p.stream) + provBlock('Hyr', p.rent) + provBlock('Köp', p.buy);
-      if (!p.stream.length && !p.rent.length && !p.buy.length) h += '<div class="sec-title">Var kan jag se den?</div><div class="small">Finns inte att streama i Sverige än.</div>';
+      h += '<div class="sek"><h3>Var kan jag se den?</h3>' +
+        (p.stream.length || p.rent.length || p.buy.length
+          ? provBlock('Streama', p.stream) + provBlock('Hyr', p.rent) + provBlock('Köp', p.buy)
+          : '<p class="beskrivning liten">Finns inte att se i Sverige än.</p>') + '</div>';
     } else {
-      h += '<p class="overview small">Info hämtas…</p>';
+      h += '<div class="sek"><p class="beskrivning liten">Info hämtas…</p></div>';
     }
-    h += '<div class="actions">';
-    h += '<button class="btn" data-act="seen">' + (it.seen ? 'Flytta tillbaka till Att se' : '✓ Markera som sedd') + '</button>';
-    if (n && n.trailer) h += '<a class="btn ghost" href="https://www.youtube.com/watch?v=' + esc(n.trailer) + '" target="_blank" rel="noopener">▶ Trailer</a>';
-    h += '<a class="btn ghost" href="https://www.themoviedb.org/' + it.type + '/' + it.id + '?language=sv-SE" target="_blank" rel="noopener">Mer på TMDB</a>';
-    h += '<button class="btn danger" data-act="remove">Ta bort</button>';
+    h += '<div class="atgarder">';
+    h += '<button type="button" class="knapp main" data-act="seen">' + (it.seen ? 'Flytta tillbaka till Att se' : 'Markera som sedd') + '</button>';
+    if (n && n.trailer) h += '<a class="knapp" href="https://www.youtube.com/watch?v=' + esc(n.trailer) + '" target="_blank" rel="noopener">▶ Trailer</a>';
+    h += '<a class="knapp" href="https://www.themoviedb.org/' + it.type + '/' + it.id + '?language=sv-SE" target="_blank" rel="noopener">Mer på TMDB</a>';
+    h += '<button type="button" class="knapp farlig" data-act="remove">Ta bort</button>';
     h += '</div>';
-    h += '<p class="small" style="margin-top:16px">Tillagd ' + esc(it.added || '') + '</p>';
+    h += '<p class="liten" style="margin-top:16px">Tillagd ' + esc(it.added || '') + '</p>';
     h += '</div>';
     return h;
   }
@@ -620,36 +706,37 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
     openSheet(detailHtml(it, det(it)));
     bindDetail(it);
     if (!det(it)) {
-      try { await getDetails(it); if (!sheet.hidden) { sheetContent.innerHTML = detailHtml(it, det(it)); bindDetail(it); } render(); }
+      try { await getDetails(it); if (!ark.hidden) { arkInnehall.innerHTML = detailHtml(it, det(it)); bindDetail(it); } render(); }
       catch (e) { toast(errText(e)); }
     }
   }
 
   function bindDetail(it) {
-    sheetContent.querySelector('[data-act="seen"]').addEventListener('click', () => { toggleSeen(it); closeSheet(); });
-    const rm = sheetContent.querySelector('[data-act="remove"]');
-    rm.addEventListener('click', () => armConfirm(rm, 'Tryck igen för att ta bort', () => {
-      items = items.filter(i => i !== it);
-      saveItems(); closeSheet(); render();
-      toast('Borttagen: ' + it.title);
-    }));
+    arkInnehall.querySelector('[data-act="seen"]').addEventListener('click', () => { toggleSeen(it); closeSheet(); });
+    arkInnehall.querySelector('[data-act="remove"]').addEventListener('click', () => {
+      askConfirm('Ta bort ' + it.title + '?', 'Den försvinner ur din lista. Du kan lägga till den igen via sökningen.', 'Ta bort', () => {
+        items = items.filter(i => i !== it);
+        saveItems(); closeSheet(); render();
+        toast('Borttagen: ' + it.title);
+      });
+    });
   }
 
   /* ---------- Inställningar ---------- */
   function openSettings() {
     openSheet(
-      '<div class="sheet-body nobd"><h2>Inställningar</h2>' +
-      '<div class="set-sec"><h3>TMDB API-nyckel</h3>' +
+      '<div class="ark-body utanbild"><h2 class="rubrik">Inställningar</h2>' +
+      '<div class="sek inst"><h2>TMDB API-nyckel</h2>' +
         '<p>Nyckeln sparas bara i den här webbläsaren. Du kan använda antingen <b>API Key</b> (kort) eller <b>API Read Access Token</b> (lång).</p>' +
-        '<div class="field"><input id="setKey" type="password" autocomplete="off" spellcheck="false" placeholder="Klistra in nyckeln" value="' + esc(tmdbKey) + '">' +
-        '<button class="btn" id="setKeySave">Spara och testa</button></div>' +
-        '<p class="small" style="margin-top:8px"><label><input type="checkbox" id="showKey"> Visa nyckeln</label></p></div>' +
-      '<div class="set-sec"><h3>Säkerhetskopia</h3>' +
+        '<div class="falt"><input id="setKey" type="password" autocomplete="off" spellcheck="false" placeholder="Klistra in nyckeln" value="' + esc(tmdbKey) + '">' +
+        '<button type="button" class="knapp main" id="setKeySave">Spara och testa</button></div>' +
+        '<label class="kryss"><input type="checkbox" id="showKey"> Visa nyckeln</label></div>' +
+      '<div class="sek inst"><h2>Säkerhetskopia</h2>' +
         '<p>Listan sparas i den här webbläsaren. Ladda ner en kopia då och då, så att den inte försvinner om du rensar webbläsaren eller byter mobil.</p>' +
-        '<div class="actions" style="margin-top:0"><button class="btn ghost" id="bkDown">⬇ Ladda ner kopia</button>' +
-        '<button class="btn ghost" id="bkUp">⬆ Läs in kopia</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div>' +
-        '<p class="small" id="bkMsg" style="margin-top:8px"></p></div>' +
-      '<div class="set-sec"><h3>Om</h3><p>' + items.length + ' titlar i listan. Info från TMDB hämtas om var 6:e timme, eller när du trycker på uppdatera-knappen.</p></div>' +
+        '<div class="atgarder" style="margin-top:0"><button type="button" class="knapp" id="bkDown">⬇ Ladda ner kopia</button>' +
+        '<button type="button" class="knapp" id="bkUp">⬆ Läs in kopia</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div>' +
+        '<p class="liten" id="bkMsg" style="margin:10px 0 0"></p></div>' +
+      '<div class="sek inst"><h2>Om</h2><p style="margin:0">' + items.length + ' titlar i listan. Info från TMDB hämtas om var 6:e timme, eller när du trycker på uppdatera-knappen.</p></div>' +
       '</div>'
     );
     const keyIn = $('#setKey');
@@ -702,28 +789,26 @@ footer{color:var(--muted);font-size:.75rem;line-height:1.5;padding:20px 0 calc(e
       if (!Array.isArray(list) || !list.every(x => x && x.id && (x.type === 'movie' || x.type === 'tv'))) {
         $('#bkMsg').textContent = 'Filen ser inte ut som en kopia från Se sen.'; return;
       }
-      const msg = $('#bkMsg');
-      msg.innerHTML = '⚠️ Din nuvarande lista med <b>' + items.length + '</b> titlar ersätts av kopian med <b>' + list.length + '</b> titlar. ' +
-        '<button class="btn danger" id="bkConfirm" style="margin-top:8px">Ersätt min lista</button>';
-      const b = $('#bkConfirm');
-      b.addEventListener('click', () => armConfirm(b, 'Säker? Tryck igen', () => {
-        items = list;
-        saveItems(); closeSheet(); render(); loadAll(false);
-        toast('Kopian är inläst (' + list.length + ' titlar)');
-      }));
+      askConfirm('Ersätta din lista?',
+        'Din nuvarande lista med <b>' + items.length + '</b> titlar ersätts av kopian med <b>' + list.length + '</b> titlar. Det går inte att ångra.',
+        'Ersätt', () => {
+          items = list;
+          saveItems(); closeSheet(); render(); loadAll(false);
+          toast('Kopian är inläst (' + list.length + ' titlar)');
+        });
     };
     reader.readAsText(f);
   }
 
-  $('#btnSettings').addEventListener('click', openSettings);
-  $('#btnRefresh').addEventListener('click', () => loadAll(true));
-  $('#setupSave').addEventListener('click', () => saveKey($('#setupKey').value, false));
-  $('#setupKey').addEventListener('keydown', e => { if (e.key === 'Enter') saveKey($('#setupKey').value, false); });
+  $('#btnInst').addEventListener('click', openSettings);
+  $('#btnUppdatera').addEventListener('click', () => loadAll(true));
+  $('#startSpara').addEventListener('click', () => saveKey($('#startNyckel').value, false));
+  $('#startNyckel').addEventListener('keydown', e => { if (e.key === 'Enter') saveKey($('#startNyckel').value, false); });
 
-  /* ---------- Toast ---------- */
+  /* ---------- Meddelande ---------- */
   let tTimer;
   function toast(msg) {
-    const t = $('#toast');
+    const t = $('#msg');
     t.textContent = msg; t.hidden = false;
     clearTimeout(tTimer); tTimer = setTimeout(() => { t.hidden = true; }, 2800);
   }
