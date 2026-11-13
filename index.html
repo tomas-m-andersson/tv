@@ -96,6 +96,14 @@ select{background:var(--card);color:var(--ink);border:2px solid var(--line);bord
 .bock.pa{background:var(--c-seen);border-color:var(--c-seen);color:#fff}
 .tomt{text-align:center;color:var(--mut);margin:36px 0;font-size:1.05rem;line-height:1.6}
 
+/* Sidindelning (som i Mat-appens receptbok) */
+.sidor{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 0}
+.sidor[hidden]{display:none}
+.sidor .rund:disabled{opacity:.35;cursor:default}
+.sidtext{text-align:center;font-weight:700;line-height:1.3}
+.sidsub{color:var(--mut);font-size:.85rem;font-weight:400}
+.antalfalt{width:110px;flex:none!important;min-width:0!important;text-align:center}
+
 /* Välkomstruta */
 .valkommen{background:var(--card);border-radius:24px;box-shadow:0 2px 0 var(--line);padding:18px 20px;margin:8px 0 14px}
 .valkommen h2{margin:0 0 8px;font-size:1.3rem}
@@ -216,6 +224,15 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
 
   <div id="lista" class="lista kravernyckel"></div>
   <p id="tomt" class="tomt kravernyckel" hidden></p>
+  <nav id="sidor" class="sidor kravernyckel" aria-label="Sidor" hidden>
+    <button type="button" class="rund" id="sidaForra" aria-label="Föregående sida">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="sidtext"><div id="sidaNr"></div><div class="sidsub" id="sidaInfo"></div></div>
+    <button type="button" class="rund" id="sidaNasta" aria-label="Nästa sida">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </nav>
 
   <footer>
     Film- och seriedata kommer från <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a>.
@@ -255,13 +272,15 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
     get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
   };
-  const K_ITEMS = 'seSen.items', K_KEY = 'seSen.tmdbKey', K_CACHE = 'seSen.cache', K_SORT = 'seSen.sort';
+  const K_ITEMS = 'seSen.items', K_KEY = 'seSen.tmdbKey', K_CACHE = 'seSen.cache', K_SORT = 'seSen.sort', K_PER = 'seSen.perPage';
   const TTL = 6 * 3600 * 1000; // info hämtas om var 6:e timme
 
   let items = LS.get(K_ITEMS, []);
   let tmdbKey = LS.get(K_KEY, '');
   let cache = LS.get(K_CACHE, {});
   let tab = 'todo', filter = 'all', sortBy = LS.get(K_SORT, 'soon');
+  let perPage = LS.get(K_PER, 20);   // 0 = visa alla på en sida
+  let page = 1;
 
   const saveItems = () => LS.set(K_ITEMS, items);
   const saveCache = () => { if (!LS.set(K_CACHE, cache)) { cache = {}; LS.set(K_CACHE, cache); } };
@@ -481,7 +500,22 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
     else if (sortBy === 'added') arr.sort((a, b) => (b.addedAt || 0) - (a.addedAt || 0));
     else if (tab === 'seen') arr.sort((a, b) => (b.seenAt || 0) - (a.seenAt || 0));
     else arr.sort((a, b) => statusOf(a, det(a)).key - statusOf(b, det(b)).key || tl(a).localeCompare(tl(b), 'sv'));
-    $('#lista').innerHTML = arr.map(card).join('');
+    // Sidindelning
+    const total = arr.length;
+    const pages = perPage > 0 ? Math.max(1, Math.ceil(total / perPage)) : 1;
+    if (page > pages) page = pages;
+    if (page < 1) page = 1;
+    const start = perPage > 0 ? (page - 1) * perPage : 0;
+    const shown = perPage > 0 ? arr.slice(start, start + perPage) : arr;
+    $('#lista').innerHTML = shown.map(card).join('');
+    const sidor = $('#sidor');
+    sidor.hidden = pages <= 1;
+    if (pages > 1) {
+      $('#sidaNr').textContent = 'Sida ' + page + ' av ' + pages;
+      $('#sidaInfo').textContent = 'Visar ' + (start + 1) + '–' + (start + shown.length) + ' av ' + total;
+      $('#sidaForra').disabled = page <= 1;
+      $('#sidaNasta').disabled = page >= pages;
+    }
     const tomt = $('#tomt');
     tomt.hidden = arr.length > 0;
     if (!arr.length) {
@@ -589,7 +623,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
 
   /* ---------- Flikar, filter, sortering ---------- */
   function setTab(t) {
-    tab = t;
+    tab = t; page = 1;
     document.querySelectorAll('.appnav button').forEach(b => {
       if (b.dataset.tab === t) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
     });
@@ -597,13 +631,21 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
   }
   document.querySelectorAll('.appnav button').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
   document.querySelectorAll('.filter button').forEach(b => b.addEventListener('click', () => {
-    filter = b.dataset.f;
+    filter = b.dataset.f; page = 1;
     document.querySelectorAll('.filter button').forEach(c => c.setAttribute('aria-pressed', String(c === b)));
     render();
   }));
   const sortSel = $('#sort');
   sortSel.value = sortBy;
-  sortSel.addEventListener('change', () => { sortBy = sortSel.value; LS.set(K_SORT, sortBy); render(); });
+  sortSel.addEventListener('change', () => { sortBy = sortSel.value; LS.set(K_SORT, sortBy); page = 1; render(); });
+
+  function gotoPage(n) {
+    page = n; render();
+    const top = $('.appnav').getBoundingClientRect().top + window.scrollY - 12;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  }
+  $('#sidaForra').addEventListener('click', () => gotoPage(page - 1));
+  $('#sidaNasta').addEventListener('click', () => gotoPage(page + 1));
 
   /* ---------- Klick på kort ---------- */
   $('#lista').addEventListener('click', e => {
@@ -736,10 +778,22 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
         '<div class="atgarder" style="margin-top:0"><button type="button" class="knapp" id="bkDown">⬇ Ladda ner kopia</button>' +
         '<button type="button" class="knapp" id="bkUp">⬆ Läs in kopia</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div>' +
         '<p class="liten" id="bkMsg" style="margin:10px 0 0"></p></div>' +
+      '<div class="sek inst"><h2>Sidindelning</h2>' +
+        '<p>Hur många filmer och serier ska visas per sida? Finns det fler delas listan upp i sidor med pilar längst ner. Skriv <b>0</b> för att visa allt på en sida.</p>' +
+        '<div class="falt"><input id="setPer" class="antalfalt" type="number" inputmode="numeric" min="0" max="500" step="1" value="' + perPage + '">' +
+        '<button type="button" class="knapp main" id="setPerSave">Spara</button></div></div>' +
       '<div class="sek inst"><h2>Om</h2><p style="margin:0">' + items.length + ' titlar i listan. Info från TMDB hämtas om var 6:e timme, eller när du trycker på uppdatera-knappen.</p></div>' +
       '</div>'
     );
     const keyIn = $('#setKey');
+    const savePer = () => {
+      const v = parseInt($('#setPer').value, 10);
+      if (isNaN(v) || v < 0 || v > 500) { toast('Skriv ett tal mellan 0 och 500'); return; }
+      perPage = v; LS.set(K_PER, perPage); page = 1; render();
+      toast(v === 0 ? 'Allt visas på en sida' : v + ' per sida');
+    };
+    $('#setPerSave').addEventListener('click', savePer);
+    $('#setPer').addEventListener('keydown', e => { if (e.key === 'Enter') savePer(); });
     $('#showKey').addEventListener('change', e => { keyIn.type = e.target.checked ? 'text' : 'password'; });
     $('#setKeySave').addEventListener('click', () => saveKey(keyIn.value, true));
     $('#bkDown').addEventListener('click', downloadBackup);
