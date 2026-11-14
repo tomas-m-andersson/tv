@@ -1,8 +1,34 @@
 {
   "app": "tv",
   "version": 2,
-  "uppdaterad": "2026-11-14T19:44:46.722Z",
+  "uppdaterad": "2026-11-14T22:59:23.975Z",
   "items": [
+    {
+      "id": "OL1379948W",
+      "type": "book",
+      "title": "Nybyggarna",
+      "authors": "Vilhelm Moberg",
+      "year": "1956",
+      "cover": 4445573,
+      "pages": 627,
+      "added": "2026-11-14",
+      "addedAt": 1794697162087,
+      "seen": false,
+      "updatedAt": 1794697162087
+    },
+    {
+      "id": "OL1379953W",
+      "type": "book",
+      "title": "Utvandrarna",
+      "authors": "Vilhelm Moberg",
+      "year": "1949",
+      "cover": 664443,
+      "pages": 383,
+      "added": "2026-11-14",
+      "addedAt": 1794697160810,
+      "seen": false,
+      "updatedAt": 1794697160810
+    },
     {
       "id": 1472679,
       "type": "movie",
