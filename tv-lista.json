@@ -1,8 +1,19 @@
 {
   "app": "tv",
   "version": 2,
-  "uppdaterad": "2026-11-13T18:00:59.987Z",
+  "uppdaterad": "2026-11-14T19:44:46.722Z",
   "items": [
+    {
+      "id": 1472679,
+      "type": "movie",
+      "title": "Arne Goes to Space",
+      "poster": "/8tddTbNOqU3SXkThIpFYFoioD2O.jpg",
+      "year": "2026",
+      "added": "2026-11-14",
+      "addedAt": 1794685484589,
+      "seen": false,
+      "updatedAt": 1794685484590
+    },
     {
       "id": 1101383,
       "type": "movie",
