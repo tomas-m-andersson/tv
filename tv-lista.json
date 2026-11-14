@@ -1,7 +1,7 @@
 {
   "app": "tv",
   "version": 2,
-  "uppdaterad": "2026-11-14T23:03:15.407Z",
+  "uppdaterad": "2026-11-14T23:03:20.119Z",
   "items": [
     {
       "id": "OL15414340W",
@@ -13,8 +13,10 @@
       "pages": 944,
       "added": "2026-11-15",
       "addedAt": 1794697393422,
-      "seen": false,
-      "updatedAt": 1794697393422
+      "seen": true,
+      "updatedAt": 1794697395614,
+      "seenDate": "2026-11-15",
+      "seenAt": 1794697395614
     },
     {
       "id": "OL16799133W",
@@ -26,8 +28,10 @@
       "pages": 920,
       "added": "2026-11-15",
       "addedAt": 1794697392253,
-      "seen": false,
-      "updatedAt": 1794697392253
+      "seen": true,
+      "updatedAt": 1794697395840,
+      "seenDate": "2026-11-15",
+      "seenAt": 1794697395840
     },
     {
       "id": "OL7924143W",
@@ -39,8 +43,10 @@
       "pages": 670,
       "added": "2026-11-15",
       "addedAt": 1794697391922,
-      "seen": false,
-      "updatedAt": 1794697391922
+      "seen": true,
+      "updatedAt": 1794697396023,
+      "seenDate": "2026-11-15",
+      "seenAt": 1794697396023
     },
     {
       "id": "OL1946681W",
@@ -52,8 +58,10 @@
       "pages": 824,
       "added": "2026-11-15",
       "addedAt": 1794697391597,
-      "seen": false,
-      "updatedAt": 1794697391597
+      "seen": true,
+      "updatedAt": 1794697396184,
+      "seenDate": "2026-11-15",
+      "seenAt": 1794697396184
     },
     {
       "id": "OL7924161W",
@@ -65,8 +73,10 @@
       "pages": 771,
       "added": "2026-11-15",
       "addedAt": 1794697391257,
-      "seen": false,
-      "updatedAt": 1794697391257
+      "seen": true,
+      "updatedAt": 1794697396367,
+      "seenDate": "2026-11-15",
+      "seenAt": 1794697396367
     },
     {
       "id": "OL7924199W",
@@ -78,8 +88,10 @@
       "pages": 984,
       "added": "2026-11-15",
       "addedAt": 1794697390111,
-      "seen": false,
-      "updatedAt": 1794697390111
+      "seen": true,
+      "updatedAt": 1794697396534,
+      "seenDate": "2026-11-15",
+      "seenAt": 1794697396534
     },
     {
       "id": "OL7924099W",
@@ -91,8 +103,10 @@
       "pages": 704,
       "added": "2026-11-15",
       "addedAt": 1794697389812,
-      "seen": false,
-      "updatedAt": 1794697389812
+      "seen": true,
+      "updatedAt": 1794697396723,
+      "seenDate": "2026-11-15",
+      "seenAt": 1794697396723
     },
     {
       "id": "OL1946682W",
@@ -104,8 +118,10 @@
       "pages": 336,
       "added": "2026-11-15",
       "addedAt": 1794697389504,
-      "seen": false,
-      "updatedAt": 1794697389504
+      "seen": true,
+      "updatedAt": 1794697396904,
+      "seenDate": "2026-11-15",
+      "seenAt": 1794697396904
     },
     {
       "id": "OL7924194W",
@@ -117,8 +133,10 @@
       "pages": 832,
       "added": "2026-11-15",
       "addedAt": 1794697389142,
-      "seen": false,
-      "updatedAt": 1794697389142
+      "seen": true,
+      "updatedAt": 1794697397059,
+      "seenDate": "2026-11-15",
+      "seenAt": 1794697397059
     },
     {
       "id": "OL7924135W",
@@ -130,8 +148,10 @@
       "pages": 656,
       "added": "2026-11-15",
       "addedAt": 1794697387872,
-      "seen": false,
-      "updatedAt": 1794697387872
+      "seen": true,
+      "updatedAt": 1794697397225,
+      "seenDate": "2026-11-15",
+      "seenAt": 1794697397225
     },
     {
       "id": "OL1946687W",
@@ -143,8 +163,10 @@
       "pages": 608,
       "added": "2026-11-15",
       "addedAt": 1794697387527,
-      "seen": false,
-      "updatedAt": 1794697387527
+      "seen": true,
+      "updatedAt": 1794697397404,
+      "seenDate": "2026-11-15",
+      "seenAt": 1794697397404
     },
     {
       "id": "OL7924172W",
@@ -156,8 +178,10 @@
       "pages": 894,
       "added": "2026-11-15",
       "addedAt": 1794697387182,
-      "seen": false,
-      "updatedAt": 1794697387182
+      "seen": true,
+      "updatedAt": 1794697397570,
+      "seenDate": "2026-11-15",
+      "seenAt": 1794697397570
     },
     {
       "id": "OL7924207W",
@@ -169,8 +193,10 @@
       "pages": 668,
       "added": "2026-11-15",
       "addedAt": 1794697386821,
-      "seen": false,
-      "updatedAt": 1794697386821
+      "seen": true,
+      "updatedAt": 1794697397721,
+      "seenDate": "2026-11-15",
+      "seenAt": 1794697397721
     },
     {
       "id": "OL7924103W",
@@ -182,8 +208,10 @@
       "pages": 782,
       "added": "2026-11-15",
       "addedAt": 1794697386451,
-      "seen": false,
-      "updatedAt": 1794697386451
+      "seen": true,
+      "updatedAt": 1794697397900,
+      "seenDate": "2026-11-15",
+      "seenAt": 1794697397900
     },
     {
       "id": "OL7924208W",
@@ -195,8 +223,10 @@
       "pages": 921,
       "added": "2026-11-15",
       "addedAt": 1794697385886,
-      "seen": false,
-      "updatedAt": 1794697385886
+      "seen": true,
+      "updatedAt": 1794697398074,
+      "seenDate": "2026-11-15",
+      "seenAt": 1794697398074
     },
     {
       "id": "OL16249182W",
