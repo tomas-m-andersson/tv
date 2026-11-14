@@ -1,7 +1,7 @@
 {
   "app": "tv",
   "version": 2,
-  "uppdaterad": "2026-11-14T22:59:30.088Z",
+  "uppdaterad": "2026-11-14T22:59:39.880Z",
   "items": [
     {
       "id": "OL16249182W",
@@ -13,8 +13,10 @@
       "pages": 366,
       "added": "2026-11-14",
       "addedAt": 1794697168175,
-      "seen": false,
-      "updatedAt": 1794697168175
+      "seen": true,
+      "updatedAt": 1794697176687,
+      "seenDate": "2026-11-14",
+      "seenAt": 1794697176687
     },
     {
       "id": "OL1379952W",
@@ -26,8 +28,10 @@
       "pages": 568,
       "added": "2026-11-14",
       "addedAt": 1794697167478,
-      "seen": false,
-      "updatedAt": 1794697167478
+      "seen": true,
+      "updatedAt": 1794697177576,
+      "seenDate": "2026-11-14",
+      "seenAt": 1794697177576
     },
     {
       "id": "OL1379948W",
@@ -39,8 +43,10 @@
       "pages": 627,
       "added": "2026-11-14",
       "addedAt": 1794697162087,
-      "seen": false,
-      "updatedAt": 1794697162087
+      "seen": true,
+      "updatedAt": 1794697177091,
+      "seenDate": "2026-11-14",
+      "seenAt": 1794697177091
     },
     {
       "id": "OL1379953W",
@@ -52,8 +58,10 @@
       "pages": 383,
       "added": "2026-11-14",
       "addedAt": 1794697160810,
-      "seen": false,
-      "updatedAt": 1794697160810
+      "seen": true,
+      "updatedAt": 1794697177948,
+      "seenDate": "2026-11-14",
+      "seenAt": 1794697177948
     },
     {
       "id": 1472679,
