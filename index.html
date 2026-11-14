@@ -36,6 +36,13 @@ h1{font-size:clamp(2.4rem,9vw,3.6rem);line-height:1;margin:0;font-weight:800;let
 .rund.spin svg{animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* Lägesmeny Titta / Läsa (ersätter rubriken) */
+.dold{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.lage{display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--card);box-shadow:0 2px 0 var(--line)}
+.lage button{height:48px;padding:0 24px;border:0;border-radius:999px;background:transparent;color:var(--mut);font-weight:800;font-size:1.15rem}
+.lage button[aria-current="page"]{background:var(--acc);color:var(--accink)}
+.barafilm[hidden],.filter[hidden]{display:none}
+
 /* Knappar */
 .knapp{height:44px;padding:0 18px;border-radius:999px;border:2px solid #8fa3b8;border-color:color-mix(in srgb,var(--ink) 38%,var(--card));
   background:var(--card);color:var(--ink);font-weight:700;font-size:.95rem;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
@@ -77,7 +84,7 @@ select{background:var(--card);color:var(--ink);border:2px solid var(--line);bord
 .lista{display:grid;gap:10px}
 .kort{--dc:var(--c-out);display:flex;gap:14px;align-items:center;background:var(--card);border-radius:20px;
   box-shadow:inset 8px 0 0 var(--dc),0 2px 0 var(--line);padding:12px 12px 12px 22px;cursor:pointer}
-.kort.soon{--dc:var(--c-soon)} .kort.avail{--dc:var(--c-avail)} .kort.rent{--dc:var(--c-rent)} .kort.sedd{--dc:var(--c-seen)}
+.kort.bok{--dc:var(--acc)} .kort.soon{--dc:var(--c-soon)} .kort.avail{--dc:var(--c-avail)} .kort.rent{--dc:var(--c-rent)} .kort.sedd{--dc:var(--c-seen)}
 @media (prefers-reduced-motion:no-preference){.kort{transition:transform .15s}.kort:active{transform:scale(.985)}}
 .poster{width:78px;height:117px;border-radius:14px;object-fit:cover;background:var(--bg);flex:none}
 .poster.ph{display:grid;place-items:center;color:var(--mut)}
@@ -113,6 +120,13 @@ select{background:var(--card);color:var(--ink);border:2px solid var(--line);bord
 .temaval{flex-wrap:wrap}
 .temaval button{display:inline-flex;align-items:center;gap:6px}
 .temaval svg{width:18px;height:18px}
+.bokhuvud{display:flex;gap:16px;align-items:flex-start;margin-bottom:6px}
+.bokhuvud img,.bokhuvud .ph{width:112px;height:168px;border-radius:14px;object-fit:cover;background:var(--card);flex:none;box-shadow:0 2px 0 var(--line);display:grid;place-items:center;color:var(--mut)}
+.bokhuvud .ph svg{width:34px;height:34px}
+.forfattare{font-weight:700;color:var(--mut);margin:2px 0 0}
+.lankar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.lankar:last-child{margin-bottom:0}
+.lankar a{height:40px;padding:0 16px;font-size:.9rem}
 .antalfalt{width:110px;flex:none!important;min-width:0!important;text-align:center}
 
 /* Välkomstruta */
@@ -148,7 +162,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
 .sek{background:var(--card);border-radius:20px;padding:16px 18px 18px;margin-top:14px;box-shadow:0 2px 0 var(--line)}
 .sek h3{margin:0 0 8px;font-size:1.05rem}
 .sek.status{--dc:var(--c-out);box-shadow:inset 8px 0 0 var(--dc),0 2px 0 var(--line);padding-left:26px}
-.sek.status.soon{--dc:var(--c-soon)} .sek.status.avail{--dc:var(--c-avail)} .sek.status.rent{--dc:var(--c-rent)} .sek.status.sedd{--dc:var(--c-seen)}
+.sek.status.bok{--dc:var(--acc)} .sek.status.soon{--dc:var(--c-soon)} .sek.status.avail{--dc:var(--c-avail)} .sek.status.rent{--dc:var(--c-rent)} .sek.status.sedd{--dc:var(--c-seen)}
 .storstatus{font-size:1.25rem;font-weight:800;line-height:1.2}
 .beskrivning{margin:0;line-height:1.6}
 .prov-rad{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
@@ -186,9 +200,13 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
 <body>
 <main>
   <div class="top">
-    <h1>TV</h1>
+    <h1 class="dold">TV</h1>
+    <nav class="lage" aria-label="Välj lista">
+      <button type="button" data-mode="titta">Titta</button>
+      <button type="button" data-mode="lasa">Läsa</button>
+    </nav>
     <div class="icons">
-      <button id="btnUppdatera" class="rund kravernyckel" type="button" aria-label="Uppdatera info" title="Uppdatera info">
+      <button id="btnUppdatera" class="rund kravernyckel barafilm" type="button" aria-label="Uppdatera info" title="Uppdatera info">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 4v5h-5"/></svg>
       </button>
       <button id="btnInst" class="rund" type="button" aria-label="Inställningar" title="Inställningar">
@@ -199,7 +217,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
   <p class="sub"><span id="dagtext">Filmer och serier att se</span><span id="synktext"></span></p>
 
   <section id="valkommen" class="valkommen" hidden>
-    <h2>Välkommen till TV! 🍿</h2>
+    <h2>Välkommen till TV!</h2>
     <p>Här samlar du filmer och serier du vill se. Sidan hämtar affischer, beskrivningar, premiärdatum och var de finns att streama från TMDB.</p>
     <p>Klistra in din gratis API-nyckel från TMDB här nedanför. Nyckeln sparas bara i din webbläsare, inte i någon fil.</p>
     <div class="falt">
@@ -216,8 +234,8 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
   </div>
 
   <nav class="appnav kravernyckel" aria-label="Listor">
-    <button type="button" data-tab="todo" aria-current="page">Att se<span id="antTodo" class="antal"></span></button>
-    <button type="button" data-tab="seen">Sedda<span id="antSeen" class="antal"></span></button>
+    <button type="button" data-tab="todo" aria-current="page"><span id="flikTodo">Att se</span><span id="antTodo" class="antal"></span></button>
+    <button type="button" data-tab="seen"><span id="flikSeen">Sedda</span><span id="antSeen" class="antal"></span></button>
   </nav>
 
   <div class="verktyg kravernyckel">
@@ -226,11 +244,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
       <button type="button" data-f="movie" aria-pressed="false">Filmer</button>
       <button type="button" data-f="tv" aria-pressed="false">Serier</button>
     </div>
-    <select id="sort" aria-label="Sortering">
-      <option value="soon">Kommer snart först</option>
-      <option value="added">Senast tillagd</option>
-      <option value="title">Titel A–Ö</option>
-    </select>
+    <select id="sort" aria-label="Sortering"></select>
   </div>
 
   <div id="lista" class="lista kravernyckel"></div>
@@ -246,9 +260,10 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
   </nav>
 
   <footer>
-    Film- och seriedata kommer från <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a>.
+    <span class="barafilm">Film- och seriedata kommer från <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a>.
     Den här sidan använder TMDB:s API men är inte godkänd eller certifierad av TMDB.
-    Information om var filmer och serier finns att se kommer från <a href="https://www.justwatch.com/se" target="_blank" rel="noopener">JustWatch</a>.
+    Information om var filmer och serier finns att se kommer från <a href="https://www.justwatch.com/se" target="_blank" rel="noopener">JustWatch</a>.</span>
+    <span id="bokkalla" hidden>Bokdata och omslag kommer från <a href="https://openlibrary.org" target="_blank" rel="noopener">Open Library</a>, ett projekt av Internet Archive.</span>
   </footer>
 </main>
 
@@ -290,11 +305,18 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
   let tmdbKey = LS.get(K_KEY, '');
   let cache = LS.get(K_CACHE, {});
   let tab = 'todo', filter = 'all', sortBy = LS.get(K_SORT, 'soon');
+  const K_MODE = 'seSen.mode', K_SORT_L = 'seSen.sortLasa';
+  const hashMode = location.hash.slice(1);
+  let mode = hashMode === 'lasa' || hashMode === 'titta' ? hashMode : LS.get(K_MODE, 'titta');
+  if (mode !== 'lasa') mode = 'titta';
+  if (mode === 'lasa') sortBy = LS.get(K_SORT_L, 'added');
   let perPage = LS.get(K_PER, 20);   // 0 = visa alla på en sida
   let page = 1, lastPages = 1;
 
   const saveItems = () => LS.set(K_ITEMS, items);
   const live = () => items.filter(i => !i.deleted);
+  const isBook = it => it.type === 'book';
+  const modeItems = () => live().filter(i => mode === 'lasa' ? isBook(i) : !isBook(i));
   // Anropas efter varje ändring i listan: sparar lokalt och synkar till GitHub
   function changed(it) {
     if (it) it.updatedAt = Date.now();
@@ -378,6 +400,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
     if (m === 'badkey') return 'API-nyckeln fungerar inte. Öppna Inställningar och kolla den.';
     if (m === 'network') return 'Kunde inte nå TMDB. Är du ansluten till internet?';
     if (m === 'nokey') return 'Lägg in din API-nyckel först.';
+    if (m === 'olnetwork' || (m && m.startsWith('ol'))) return 'Kunde inte nå Open Library just nu. Försök igen om en stund.';
     return 'Något gick fel när info hämtades (' + (m || 'okänt fel') + ').';
   }
 
@@ -488,9 +511,28 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
 
   /* ---------- Rita listan ---------- */
   const ICON_CHECK = SVG.replace('stroke-width="2"', 'stroke-width="2.6"') + '<path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  const ICON_PLAY = SVG + '<path d="M7 5l12 7-12 7z"/></svg>';
+  const ICON_BOK = SVG + '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/><path d="M19 19v2H6"/></svg>';
   const ICON_FILM = SVG + '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9.5l5 2.5-5 2.5z"/></svg>';
 
+  const coverUrl = (it, size) => it.cover ? 'https://covers.openlibrary.org/b/id/' + encodeURIComponent(it.cover) + '-' + size + '.jpg' : null;
+  function bookCard(it) {
+    const cover = coverUrl(it, 'M');
+    return '<article class="kort ' + (it.seen ? 'sedd' : 'bok') + '" data-key="' + esc(keyOf(it)) + '">' +
+      (cover ? '<img class="poster" loading="lazy" alt="" src="' + esc(cover) + '">' : '<div class="poster ph">' + ICON_BOK + '</div>') +
+      '<div class="info">' +
+        '<div class="typ">Bok' + (it.year ? ' · ' + esc(it.year) : '') + '</div>' +
+        '<h3>' + esc(it.title) + '</h3>' +
+        (it.authors ? '<div class="liten">' + esc(it.authors) + '</div>' : '') +
+        (it.seen ? '<span class="badge">Läst ' + esc(it.seenDate || '') + '</span>'
+                 : '<span class="badge">' + (it.pages ? esc(it.pages) + ' sidor' : 'Vill läsa') + '</span>') +
+      '</div>' +
+      '<button type="button" class="bock' + (it.seen ? ' pa' : '') + '" data-seen aria-label="' + (it.seen ? 'Flytta tillbaka till Att läsa' : 'Markera som läst') + '">' + ICON_CHECK + '</button>' +
+    '</article>';
+  }
+
   function card(it) {
+    if (isBook(it)) return bookCard(it);
     const n = det(it), s = statusOf(it, n);
     const poster = (n && n.poster) || it.poster;
     const title = (n && n.title) || it.title;
@@ -511,15 +553,17 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
   }
 
   function render() {
-    document.body.classList.toggle('ingennyckel', !tmdbKey);
-    $('#valkommen').hidden = !!tmdbKey;
-    const all = live();
+    const needKey = mode === 'titta' && !tmdbKey;
+    document.body.classList.toggle('ingennyckel', needKey);
+    $('#valkommen').hidden = !needKey;
+    const all = modeItems();
     const todo = all.filter(i => !i.seen), seen = all.filter(i => i.seen);
     $('#antTodo').textContent = todo.length ? ' (' + todo.length + ')' : '';
     $('#antSeen').textContent = seen.length ? ' (' + seen.length + ')' : '';
-    let arr = (tab === 'todo' ? todo : seen).filter(i => filter === 'all' || i.type === filter);
-    const tl = i => ((det(i) || {}).title || i.title || '');
-    if (sortBy === 'title') arr.sort((a, b) => tl(a).localeCompare(tl(b), 'sv'));
+    let arr = (tab === 'todo' ? todo : seen).filter(i => mode === 'lasa' || filter === 'all' || i.type === filter);
+    const tl = i => (!isBook(i) && (det(i) || {}).title) || i.title || '';
+    if (sortBy === 'author') arr.sort((a, b) => (a.authors || 'ö').localeCompare(b.authors || 'ö', 'sv') || tl(a).localeCompare(tl(b), 'sv'));
+    else if (sortBy === 'title') arr.sort((a, b) => tl(a).localeCompare(tl(b), 'sv'));
     else if (sortBy === 'added') arr.sort((a, b) => (b.addedAt || 0) - (a.addedAt || 0));
     else if (tab === 'seen') arr.sort((a, b) => (b.seenAt || 0) - (a.seenAt || 0));
     else arr.sort((a, b) => statusOf(a, det(a)).key - statusOf(b, det(b)).key || tl(a).localeCompare(tl(b), 'sv'));
@@ -544,8 +588,8 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
     tomt.hidden = arr.length > 0;
     if (!arr.length) {
       tomt.innerHTML = all.length === 0
-        ? 'Listan är tom.<br>Sök efter en film eller serie här ovanför och tryck <b>Lägg till</b>.'
-        : (tab === 'seen' ? 'Inget markerat som sett än.' : 'Inget här just nu.');
+        ? 'Listan är tom.<br>Sök efter ' + (mode === 'lasa' ? 'en bok eller författare' : 'en film eller serie') + ' här ovanför och tryck <b>Lägg till</b>.'
+        : (tab === 'seen' ? (mode === 'lasa' ? 'Inget markerat som läst än.' : 'Inget markerat som sett än.') : 'Inget här just nu.');
     }
   }
 
@@ -555,7 +599,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
     if (!tmdbKey || loading || !items.length) return;
     loading = true;
     $('#btnUppdatera').classList.add('spin');
-    const queue = live();
+    const queue = live().filter(i => !isBook(i));
     let firstErr = null, lastRender = 0;
     async function worker() {
       while (queue.length) {
@@ -597,9 +641,24 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
     resultat.hidden = false;
     resultat.innerHTML = '<div class="r-msg">Söker…</div>';
     try {
-      const d = await tmdb('/search/multi', { query: v, language: 'sv-SE', include_adult: 'false' });
-      if (my !== sSeq) return;
-      lastResults = (d.results || []).filter(x => x.media_type === 'movie' || x.media_type === 'tv').slice(0, 15);
+      if (mode === 'lasa') {
+        const d = await olFetch(OL + '/search.json?q=' + encodeURIComponent(v) + '&lang=sv&limit=15' +
+          '&fields=key,title,author_name,first_publish_year,cover_i,number_of_pages_median');
+        if (my !== sSeq) return;
+        lastResults = (d.docs || []).filter(x => x.key && x.title).map(x => ({
+          id: String(x.key).replace('/works/', ''), type: 'book', title: x.title,
+          year: x.first_publish_year ? String(x.first_publish_year) : '',
+          authors: (x.author_name || []).slice(0, 3).join(', '),
+          cover: x.cover_i || null, pages: x.number_of_pages_median || null
+        }));
+      } else {
+        const d = await tmdb('/search/multi', { query: v, language: 'sv-SE', include_adult: 'false' });
+        if (my !== sSeq) return;
+        lastResults = (d.results || []).filter(x => x.media_type === 'movie' || x.media_type === 'tv').slice(0, 15).map(x => ({
+          id: x.id, type: x.media_type, title: x.title || x.name || '',
+          year: (x.release_date || x.first_air_date || '').slice(0, 4), poster: x.poster_path || null
+        }));
+      }
       renderResults();
     } catch (e) {
       if (my !== sSeq) return;
@@ -610,14 +669,16 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
   function renderResults() {
     if (!lastResults.length) { resultat.innerHTML = '<div class="r-msg">Hittade inget. Prova en annan stavning eller originaltiteln.</div>'; return; }
     resultat.innerHTML = lastResults.map((r, i) => {
-      const title = r.title || r.name || '';
-      const year = (r.release_date || r.first_air_date || '').slice(0, 4);
-      const has = live().some(it => it.id === r.id && it.type === r.media_type);
+      const has = live().some(it => it.id === r.id && it.type === r.type);
+      const img = r.type === 'book' ? coverUrl(r, 'M') : (r.poster ? IMG + 'w92' + r.poster : null);
+      const meta = r.type === 'book'
+        ? (r.authors || 'Okänd författare') + (r.year ? ' · ' + r.year : '')
+        : (r.type === 'movie' ? 'Film' : 'Serie') + (r.year ? ' · ' + r.year : ' · inget datum än');
       return '<div class="r-rad">' +
-        (r.poster_path ? '<img alt="" src="' + IMG + 'w92' + esc(r.poster_path) + '">' : '<div class="ph">' + ICON_FILM + '</div>') +
-        '<div class="r-info"><div class="r-titel">' + esc(title) + '</div>' +
-        '<div class="r-meta">' + (r.media_type === 'movie' ? 'Film' : 'Serie') + (year ? ' · ' + year : ' · inget datum än') + '</div></div>' +
-        (has ? '<button type="button" class="r-add klar" disabled>✓ I listan</button>' : '<button type="button" class="r-add" data-add="' + i + '">Lägg till</button>') +
+        (img ? '<img alt="" loading="lazy" src="' + esc(img) + '">' : '<div class="ph">' + (r.type === 'book' ? ICON_BOK : ICON_FILM) + '</div>') +
+        '<div class="r-info"><div class="r-titel">' + esc(r.title) + '</div>' +
+        '<div class="r-meta">' + esc(meta) + '</div></div>' +
+        (has ? '<button type="button" class="r-add klar" disabled>I listan</button>' : '<button type="button" class="r-add" data-add="' + i + '">Lägg till</button>') +
       '</div>';
     }).join('');
   }
@@ -627,12 +688,12 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
     if (!b) return;
     const r = lastResults[+b.dataset.add];
     if (!r) return;
-    const fresh = {
-      id: r.id, type: r.media_type, title: r.title || r.name || '',
-      poster: r.poster_path || null, year: (r.release_date || r.first_air_date || '').slice(0, 4),
-      added: today(), addedAt: Date.now(), seen: false
-    };
-    let it = items.find(i => i.id === r.id && i.type === r.media_type);
+    const fresh = r.type === 'book'
+      ? { id: r.id, type: 'book', title: r.title, authors: r.authors, year: r.year, cover: r.cover, pages: r.pages,
+          added: today(), addedAt: Date.now(), seen: false }
+      : { id: r.id, type: r.type, title: r.title, poster: r.poster, year: r.year,
+          added: today(), addedAt: Date.now(), seen: false };
+    let it = items.find(i => i.id === r.id && i.type === r.type);
     if (it) {           // fanns som borttagen – väck den till liv igen
       for (const k of Object.keys(it)) delete it[k];
       Object.assign(it, fresh);
@@ -645,6 +706,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
     renderResults();
     if (tab !== 'todo') setTab('todo'); else render();
     toast('Tillagd: ' + it.title);
+    if (isBook(it)) return;
     try {
       const n = await getDetails(it);
       if (n.title) it.title = n.title;
@@ -668,8 +730,47 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
     render();
   }));
   const sortSel = $('#sort');
-  sortSel.value = sortBy;
-  sortSel.addEventListener('change', () => { sortBy = sortSel.value; LS.set(K_SORT, sortBy); page = 1; render(); });
+  const SORTS = {
+    titta: [['soon', 'Kommer snart först'], ['added', 'Senast tillagd'], ['title', 'Titel A–Ö']],
+    lasa: [['added', 'Senast tillagd'], ['title', 'Titel A–Ö'], ['author', 'Författare A–Ö']]
+  };
+  function fillSort() {
+    const opts = SORTS[mode];
+    if (!opts.some(o => o[0] === sortBy)) sortBy = opts[0][0];
+    sortSel.innerHTML = opts.map(o => '<option value="' + o[0] + '">' + o[1] + '</option>').join('');
+    sortSel.value = sortBy;
+  }
+  sortSel.addEventListener('change', () => { sortBy = sortSel.value; LS.set(mode === 'lasa' ? K_SORT_L : K_SORT, sortBy); page = 1; render(); });
+
+  /* ---------- Läge: Titta eller Läsa ---------- */
+  function applyMode() {
+    const lasa = mode === 'lasa';
+    document.querySelectorAll('[data-mode]').forEach(b => {
+      if (b.dataset.mode === mode) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+    });
+    $('#flikTodo').textContent = lasa ? 'Att läsa' : 'Att se';
+    $('#flikSeen').textContent = lasa ? 'Lästa' : 'Sedda';
+    q.placeholder = lasa ? 'Sök bok eller författare…' : 'Sök film eller serie…';
+    document.querySelectorAll('.barafilm').forEach(el => { el.hidden = lasa; });
+    $('.filter').hidden = lasa;
+    $('#bokkalla').hidden = !lasa;
+    fillSort();
+  }
+  function setMode(m) {
+    m = m === 'lasa' ? 'lasa' : 'titta';
+    if (m === mode) return;
+    mode = m; LS.set(K_MODE, mode);
+    sortBy = mode === 'lasa' ? LS.get(K_SORT_L, 'added') : LS.get(K_SORT, 'soon');
+    page = 1; q.value = ''; resultat.hidden = true; lastResults = [];
+    applyMode();
+    if (tab !== 'todo') setTab('todo'); else render();
+    window.scrollTo({ top: 0 });
+  }
+  document.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => {
+    if (location.hash.slice(1) !== b.dataset.mode) location.hash = b.dataset.mode; else setMode(b.dataset.mode);
+  }));
+  window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (h === 'lasa' || h === 'titta') setMode(h); });
+  applyMode();
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   function gotoPage(n) {
@@ -736,7 +837,76 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
     it.seen = !it.seen;
     if (it.seen) { it.seenDate = today(); it.seenAt = Date.now(); } else { delete it.seenDate; delete it.seenAt; }
     changed(it); render();
-    toast(it.seen ? 'Flyttad till Sedda' : 'Tillbaka i Att se');
+    toast(isBook(it) ? (it.seen ? 'Flyttad till Lästa' : 'Tillbaka i Att läsa') : (it.seen ? 'Flyttad till Sedda' : 'Tillbaka i Att se'));
+  }
+
+  /* ---------- Open Library (böcker) ---------- */
+  const OL = 'https://openlibrary.org';
+  async function olFetch(url) {
+    let r;
+    try { r = await fetch(url); } catch (e) { throw new Error('olnetwork'); }
+    if (!r.ok) throw new Error('ol' + r.status);
+    return r.json();
+  }
+  function cleanDesc(d) {
+    let t = typeof d === 'string' ? d : (d && d.value) || '';
+    t = t.split(/\r?\n-{3,}/)[0];                                     // ta bort källistor längst ner
+    t = t.replace(/\[([^\]]+)\]\[\d+\]/g, '$1').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1').replace(/\(\s*\[?source\]?[^)]*\)/gi, '');
+    return t.trim();
+  }
+  async function getBookDetails(it, force) {
+    const ck = keyOf(it), c = cache[ck];
+    if (!force && c && Date.now() - c.t < 30 * 864e5) return c.d;
+    const w = await olFetch(OL + '/works/' + encodeURIComponent(it.id) + '.json');
+    const n = {
+      description: cleanDesc(w.description),
+      subjects: (w.subjects || []).filter(x => typeof x === 'string' && x.length < 28 && !x.includes(':') && !/\d/.test(x)).slice(0, 8),
+      firstPublish: w.first_publish_date || ''
+    };
+    cache[ck] = { t: Date.now(), d: n };
+    saveCache();
+    return n;
+  }
+  // Det finns inget öppet API för var böcker finns, så länkarna söker upp boken hos varje tjänst
+  function findLink(site, it) {
+    const author = (it.authors || '').split(',')[0];
+    return 'https://www.google.com/search?q=' + encodeURIComponent('site:' + site + ' ' + it.title + (author ? ' ' + author : ''));
+  }
+  function bookDetailHtml(it, n) {
+    const cover = coverUrl(it, 'L');
+    const pills = ['<span class="pill acc">Bok</span>'];
+    if (it.year) pills.push('<span class="pill">' + esc(it.year) + '</span>');
+    if (it.pages) pills.push('<span class="pill">' + esc(it.pages) + ' sidor</span>');
+    let h = '<div class="ark-body utanbild">';
+    h += '<div class="bokhuvud">' + (cover ? '<img alt="" src="' + esc(cover) + '">' : '<div class="ph">' + ICON_BOK + '</div>') +
+      '<div><h2 class="rubrik">' + esc(it.title) + '</h2>' +
+      (it.authors ? '<p class="forfattare">' + esc(it.authors) + '</p>' : '') +
+      '<div class="meta">' + pills.join('') + '</div></div></div>';
+    h += '<div class="sek status ' + (it.seen ? 'sedd' : 'bok') + '"><div class="storstatus">' +
+      (it.seen ? 'Läst ' + esc(it.seenDate || '') : 'Vill läsa') + '</div>' +
+      '<div class="liten">Tillagd ' + esc(it.added || '') + '</div></div>';
+    if (n) {
+      h += '<div class="sek"><h3>Om boken</h3>' +
+        (n.description ? '<p class="beskrivning">' + esc(n.description) + '</p><p class="liten" style="margin:8px 0 0">Beskrivningen kommer från Open Library och är ofta på engelska.</p>'
+                       : '<p class="beskrivning liten">Open Library har ingen beskrivning av den här boken.</p>') +
+        (n.subjects.length ? '<div class="meta" style="margin:12px 0 0">' + n.subjects.map(x => '<span class="pill">' + esc(x) + '</span>').join('') + '</div>' : '') +
+        '</div>';
+    } else {
+      h += '<div class="sek"><p class="beskrivning liten">Info hämtas…</p></div>';
+    }
+    const L = (site, name) => '<a class="knapp" href="' + esc(findLink(site, it)) + '" target="_blank" rel="noopener">' + name + '</a>';
+    h += '<div class="sek"><h3>Hitta boken</h3>' +
+      '<p class="liten" style="margin:0 0 12px">Det finns ingen tjänst som visar exakt var en bok finns, så knapparna söker upp den hos varje ställe.</p>' +
+      '<p class="provtyp">Lyssna eller läs digitalt</p><div class="lankar">' + L('storytel.com/se', 'Storytel') + L('bookbeat.com/se', 'BookBeat') + L('nextory.com/se', 'Nextory') + '</div>' +
+      '<p class="provtyp">Köp</p><div class="lankar">' + L('bokus.com', 'Bokus') + L('adlibris.com/se', 'Adlibris') + '</div>' +
+      '<p class="provtyp">Låna</p><div class="lankar">' + L('libris.kb.se', 'Biblioteken (Libris)') + '</div>' +
+      '</div>';
+    h += '<div class="atgarder">';
+    h += '<button type="button" class="knapp main" data-act="seen">' + (it.seen ? 'Flytta tillbaka till Att läsa' : 'Markera som läst') + '</button>';
+    h += '<a class="knapp" href="' + OL + '/works/' + esc(encodeURIComponent(it.id)) + '" target="_blank" rel="noopener">Mer på Open Library</a>';
+    h += '<button type="button" class="knapp farlig" data-act="remove">Ta bort</button>';
+    h += '</div></div>';
+    return h;
   }
 
   /* ---------- Egen bekräftelseruta ---------- */
@@ -777,7 +947,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
       if (n.year) pills.push('<span class="pill">' + esc(n.year) + '</span>');
       if (it.type === 'movie' && n.runtime) pills.push('<span class="pill">' + Math.floor(n.runtime / 60) + ' h ' + (n.runtime % 60) + ' min</span>');
       if (it.type === 'tv' && n.seasons) pills.push('<span class="pill">' + n.seasons + (n.seasons === 1 ? ' säsong' : ' säsonger') + '</span>');
-      if (n.votes > 0) pills.push('<span class="pill">★ ' + n.rating.toLocaleString('sv-SE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '</span>');
+      if (n.votes > 0) pills.push('<span class="pill">Betyg ' + n.rating.toLocaleString('sv-SE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '</span>');
       n.genres.forEach(g => pills.push('<span class="pill">' + esc(g) + '</span>'));
     }
     let h = '';
@@ -810,7 +980,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
     }
     h += '<div class="atgarder">';
     h += '<button type="button" class="knapp main" data-act="seen">' + (it.seen ? 'Flytta tillbaka till Att se' : 'Markera som sedd') + '</button>';
-    if (n && n.trailer) h += '<a class="knapp" href="https://www.youtube.com/watch?v=' + esc(n.trailer) + '" target="_blank" rel="noopener">▶ Trailer</a>';
+    if (n && n.trailer) h += '<a class="knapp" href="https://www.youtube.com/watch?v=' + esc(n.trailer) + '" target="_blank" rel="noopener">' + ICON_PLAY + 'Trailer</a>';
     h += '<a class="knapp" href="https://www.themoviedb.org/' + it.type + '/' + it.id + '?language=sv-SE" target="_blank" rel="noopener">Mer på TMDB</a>';
     h += '<button type="button" class="knapp farlig" data-act="remove">Ta bort</button>';
     h += '</div>';
@@ -820,6 +990,16 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
   }
 
   async function openDetail(it) {
+    if (isBook(it)) {
+      const c = cache[keyOf(it)];
+      openSheet(bookDetailHtml(it, c && c.d));
+      bindDetail(it);
+      if (!c) {
+        try { const n = await getBookDetails(it); if (!ark.hidden) { arkInnehall.innerHTML = bookDetailHtml(it, n); bindDetail(it); } }
+        catch (e) { if (!ark.hidden) { arkInnehall.innerHTML = bookDetailHtml(it, { description: '', subjects: [] }); bindDetail(it); } toast(errText(e)); }
+      }
+      return;
+    }
     openSheet(detailHtml(it, det(it)));
     bindDetail(it);
     if (!det(it)) {
@@ -862,8 +1042,8 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
       syncSettingsHtml() +
       '<div class="sek inst"><h2>Säkerhetskopia</h2>' +
         '<p>' + (ghToken ? 'Listan sparas på GitHub, men du kan också ladda ner en egen kopia.' : 'Listan sparas bara i den här webbläsaren. Ladda ner en kopia då och då, eller slå på synk ovanför, så att den inte försvinner om du rensar webbläsaren eller byter mobil.') + '</p>' +
-        '<div class="atgarder" style="margin-top:0"><button type="button" class="knapp" id="bkDown">⬇ Ladda ner kopia</button>' +
-        '<button type="button" class="knapp" id="bkUp">⬆ Läs in kopia</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div>' +
+        '<div class="atgarder" style="margin-top:0"><button type="button" class="knapp" id="bkDown">Ladda ner kopia</button>' +
+        '<button type="button" class="knapp" id="bkUp">Läs in kopia</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div>' +
         '<p class="liten" id="bkMsg" style="margin:10px 0 0"></p></div>' +
       '<div class="sek inst"><h2>Om</h2><p style="margin:0">' + live().length + ' titlar i listan. Info från TMDB hämtas om var 6:e timme, eller när du trycker på uppdatera-knappen.</p></div>' +
       '</div>'
@@ -895,7 +1075,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
     try {
       await tmdb('/configuration');
       LS.set(K_KEY, tmdbKey);
-      toast('Nyckeln fungerar! 🎉');
+      toast('Nyckeln fungerar!');
       if (fromSettings) closeSheet();
       render();
       loadAll(false);
@@ -926,7 +1106,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
       let data;
       try { data = JSON.parse(reader.result); } catch (err) { $('#bkMsg').textContent = 'Filen gick inte att läsa. Är det rätt fil?'; return; }
       const list = Array.isArray(data) ? data : data.items;
-      if (!Array.isArray(list) || !list.every(x => x && x.id && (x.type === 'movie' || x.type === 'tv'))) {
+      if (!Array.isArray(list) || !list.every(x => x && x.id && (['movie', 'tv', 'book'].includes(x.type)))) {
         $('#bkMsg').textContent = 'Filen ser inte ut som en kopia från TV-appen.'; return;
       }
       askConfirm('Ersätta din lista?',
@@ -969,7 +1149,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
   function mergeLists(a, b) {
     const m = new Map();
     for (const it of [...a, ...b]) {
-      if (!it || !it.id || (it.type !== 'movie' && it.type !== 'tv')) continue;
+      if (!it || !it.id || !['movie', 'tv', 'book'].includes(it.type)) continue;
       const k = keyOf(it), o = m.get(k);
       if (!o || itemTime(it) >= itemTime(o)) m.set(k, it);   // vid lika tid vinner GitHub-versionen (b)
     }
@@ -1114,7 +1294,7 @@ footer{color:var(--mut);font-size:.8rem;line-height:1.5;margin:32px 0 0;text-ali
       ghToken = t;
       LS.set(K_GH, gh); LS.set(K_GHTOKEN, ghToken);
       const ok = await runSync();
-      if (ok) { toast('Klart! Listan synkas nu via GitHub 🎉'); openSettings(); }
+      if (ok) { toast('Klart! Listan synkas nu via GitHub.'); openSettings(); }
     });
     const now = document.getElementById('ghNow');
     if (now) now.addEventListener('click', async () => { if (await runSync()) toast('Synkad!'); });
